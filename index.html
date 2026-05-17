@@ -470,12 +470,16 @@
   }
   .qa-badge {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 9px;
-    padding: 2px 6px;
-    border-radius: 4px;
-    white-space: nowrap;
-    margin-top: 2px;
+    font-size: 10px;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     flex-shrink: 0;
+    margin-top: 1px;
+    font-weight: 500;
   }
   .qa-badge.q { background: var(--navy); color: var(--gold-light); }
   .qa-badge.a { background: var(--green-pale); color: var(--green); }
@@ -905,7 +909,7 @@
 
           <!-- 包含关系框 -->
           <rect x="102" y="110" width="72" height="105" rx="5" fill="none" stroke="#d4a843" stroke-width="1.2" stroke-dasharray="5 3"/>
-          <text x="138" y="103" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#d4a843">内包关系</text>
+          <text x="138" y="95" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#d4a843">内包关系</text>
 
           <!-- K线A（高） -->
           <rect x="108" y="115" width="26" height="96" rx="2" fill="#2e7d52" opacity="0.75"/>
@@ -939,7 +943,7 @@
 
           <!-- 包含关系框 -->
           <rect x="452" y="95" width="72" height="110" rx="5" fill="none" stroke="#d4a843" stroke-width="1.2" stroke-dasharray="5 3"/>
-          <text x="488" y="88" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#d4a843">内包关系</text>
+          <text x="488" y="80" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#d4a843">内包关系</text>
 
           <!-- K线C（较高，先出现） -->
           <rect x="458" y="100" width="26" height="100" rx="2" fill="#b94040" opacity="0.75"/>
@@ -998,8 +1002,7 @@
       <div class="qa-item">
         <div class="qa-q">
           <span class="qa-badge q">Q</span>
-          <span><span class="qa-who">奥特曼</span></span>
-          <span style="padding-left:6px;">合并K线是否会忽略真实价格信息？</span>
+          合并K线是否会忽略真实价格信息？
         </div>
         <div class="qa-a">
           <span class="qa-badge a">A</span>
@@ -1010,7 +1013,7 @@
       <div class="qa-item">
         <div class="qa-q">
           <span class="qa-badge q">Q</span>
-          <span style="padding-left:6px;">缠论能否与量价分析一起使用？</span>
+          缠论能否与量价分析一起使用？
         </div>
         <div class="qa-a">
           <span class="qa-badge a">A</span>
@@ -1021,8 +1024,7 @@
       <div class="qa-item">
         <div class="qa-q">
           <span class="qa-badge q">Q</span>
-          <span><span class="qa-who">Vclt</span></span>
-          <span style="padding-left:6px;">旗杆末端如何确定？</span>
+          旗杆末端如何确定？
         </div>
         <div class="qa-a">
           <span class="qa-badge a">A</span>
@@ -1033,11 +1035,11 @@
       <div class="qa-item">
         <div class="qa-q">
           <span class="qa-badge q">Q</span>
-          <span style="padding-left:6px;">有没有专门自动合并缠论K线的工具或指标？</span>
+          有没有专门自动合并缠论K线的工具或指标？
         </div>
         <div class="qa-a">
           <span class="qa-badge a">A</span>
-          有。常见看盘软件中可以搜索缠论相关指标（笔、线段、走势类型、中枢等），但<strong>建议先理解底层逻辑再使用</strong>，否则工具给结果你也不知道为什么，遇到特殊情况就会懵。
+          有。常见看盘软件中可以搜索缠论相关指标（笔、线段、走势类型、中枢等），但建议先理解底层逻辑再使用，否则工具给结果你也不知道为什么，遇到特殊情况就会懵。
         </div>
       </div>
     </div>
