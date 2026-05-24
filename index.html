@@ -8,1190 +8,834 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Noto+Sans+SC:wght@300;400;500;700&family=IBM+Plex+Mono:wght@300;400;500&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --navy: #12172b;
-    --navy-mid: #1c2340;
-    --navy-light: #252d4a;
-    --gold: #d4a843;
-    --gold-light: #e8c77a;
-    --gold-pale: #fdf3dc;
-    --cream: #f8f5ef;
-    --cream-dark: #f0ebe0;
-    --ink: #1a1a2e;
-    --ink-mid: #3d3d5c;
-    --ink-light: #6b6b8a;
-    --green: #2e7d52;
-    --green-pale: #edf7f2;
-    --red: #b94040;
-    --red-pale: #fdf0f0;
-    --amber: #c47a1a;
-    --amber-pale: #fef8ec;
-    --border: #e6e0d4;
-    --border-dark: #d4cec2;
-    --shadow-sm: 0 1px 3px rgba(18,23,43,0.06), 0 1px 2px rgba(18,23,43,0.04);
-    --shadow-md: 0 4px 12px rgba(18,23,43,0.09), 0 2px 4px rgba(18,23,43,0.06);
-    --shadow-lg: 0 12px 32px rgba(18,23,43,0.12), 0 4px 8px rgba(18,23,43,0.08);
-    --radius: 10px;
-    --radius-lg: 14px;
+    --navy:#12172b;--navy-mid:#1c2340;--navy-light:#252d4a;
+    --gold:#d4a843;--gold-light:#e8c77a;--gold-pale:#fdf3dc;
+    --cream:#f8f5ef;--cream-dark:#f0ebe0;
+    --ink:#1a1a2e;--ink-mid:#3d3d5c;--ink-light:#6b6b8a;
+    --green:#2e7d52;--green-pale:#edf7f2;
+    --red:#b94040;--red-pale:#fdf0f0;
+    --amber:#c47a1a;--amber-pale:#fef8ec;
+    --blue:#4a7ab5;--blue-pale:#eef3fb;
+    --border:#e6e0d4;--border-dark:#d4cec2;
+    --shadow-sm:0 1px 3px rgba(18,23,43,.06),0 1px 2px rgba(18,23,43,.04);
+    --radius:10px;--radius-lg:14px;
   }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Noto Sans SC',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;font-size:14px;line-height:1.7;-webkit-font-smoothing:antialiased}
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  /* NAV */
+  .topnav{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,.25)}
+  .topnav-inner{max-width:1200px;margin:0 auto;padding:0 28px;display:flex;align-items:center;gap:32px;height:56px}
+  .logo{font-family:'DM Serif Display',serif;color:#fff;font-size:18px;letter-spacing:.02em;white-space:nowrap;display:flex;align-items:center;gap:8px}
+  .logo-dot{width:7px;height:7px;background:var(--gold);border-radius:50%}
+  .nav-tabs{display:flex;gap:2px;flex:1;overflow-x:auto;scrollbar-width:none}
+  .nav-tabs::-webkit-scrollbar{display:none}
+  .nav-tab{font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(255,255,255,.4);padding:6px 14px;border-radius:6px;cursor:pointer;transition:all .2s;white-space:nowrap;border:none;background:transparent;letter-spacing:.04em}
+  .nav-tab:hover{color:rgba(255,255,255,.75);background:rgba(255,255,255,.06)}
+  .nav-tab.done{color:rgba(255,255,255,.35)}
+  .nav-tab.active{color:var(--gold-light);background:rgba(212,168,67,.15)}
+  .nav-badge{font-family:'IBM Plex Mono',monospace;font-size:10px;color:rgba(255,255,255,.25);margin-left:auto;white-space:nowrap}
 
-  html { scroll-behavior: smooth; }
+  /* LAYOUT */
+  .shell{max-width:1200px;margin:0 auto;padding:28px 28px 60px;display:grid;grid-template-columns:1fr 280px;gap:24px;align-items:start}
 
-  body {
-    font-family: 'Noto Sans SC', sans-serif;
-    background: var(--cream);
-    color: var(--ink);
-    min-height: 100vh;
-    font-size: 14px;
-    line-height: 1.7;
-    -webkit-font-smoothing: antialiased;
-  }
+  /* LESSON PANEL */
+  .lesson-panel{display:none}
+  .lesson-panel.active{display:block}
 
-  /* ── TOP NAV ── */
-  .topnav {
-    background: var(--navy);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 2px 20px rgba(0,0,0,0.25);
-  }
-  .topnav-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 28px;
-    display: flex;
-    align-items: center;
-    gap: 32px;
-    height: 56px;
-  }
-  .logo {
-    font-family: 'DM Serif Display', serif;
-    color: #fff;
-    font-size: 18px;
-    letter-spacing: 0.02em;
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .logo-dot { width: 7px; height: 7px; background: var(--gold); border-radius: 50%; }
-  .nav-tabs {
-    display: flex;
-    gap: 2px;
-    flex: 1;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .nav-tabs::-webkit-scrollbar { display: none; }
-  .nav-tab {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    color: rgba(255,255,255,0.4);
-    padding: 6px 14px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.2s;
-    white-space: nowrap;
-    border: none;
-    background: transparent;
-    letter-spacing: 0.04em;
-  }
-  .nav-tab:hover { color: rgba(255,255,255,0.75); background: rgba(255,255,255,0.06); }
-  .nav-tab.active {
-    color: var(--gold-light);
-    background: rgba(212,168,67,0.15);
-  }
-  .nav-badge {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    color: rgba(255,255,255,0.25);
-    margin-left: auto;
-    white-space: nowrap;
-  }
+  /* COURSE HEADER */
+  .course-header{background:var(--navy);border-radius:var(--radius-lg);padding:28px 32px;margin-bottom:20px;position:relative;overflow:hidden}
+  .course-header::before{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(212,168,67,.12) 0%,transparent 70%)}
+  .ch-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px}
+  .ch-title{font-family:'DM Serif Display',serif;font-size:28px;color:#fff;line-height:1.2;margin-bottom:10px}
+  .ch-pills{display:flex;gap:8px;flex-wrap:wrap}
+  .pill{font-size:11px;padding:4px 12px;border-radius:20px;font-family:'IBM Plex Mono',monospace;letter-spacing:.03em;border:1px solid}
+  .pill-gold{color:var(--gold-light);border-color:rgba(212,168,67,.35);background:rgba(212,168,67,.1)}
+  .pill-gray{color:rgba(255,255,255,.35);border-color:rgba(255,255,255,.12)}
 
-  /* ── LAYOUT ── */
-  .shell {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 28px 28px 60px;
-    display: grid;
-    grid-template-columns: 1fr 280px;
-    gap: 24px;
-    align-items: start;
-  }
+  /* CARDS */
+  .card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:22px 24px;margin-bottom:16px;box-shadow:var(--shadow-sm);animation:fadeUp .4s ease both}
+  .card:nth-child(1){animation-delay:.05s}.card:nth-child(2){animation-delay:.1s}.card:nth-child(3){animation-delay:.15s}.card:nth-child(4){animation-delay:.2s}.card:nth-child(5){animation-delay:.25s}.card:nth-child(6){animation-delay:.3s}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+  .card-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+  .card-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+  .ci-gold{background:var(--gold-pale)}.ci-green{background:var(--green-pale)}.ci-red{background:var(--red-pale)}.ci-amber{background:var(--amber-pale)}.ci-navy{background:rgba(18,23,43,.06)}
+  .card-title{font-family:'Noto Serif SC',serif;font-size:15px;font-weight:600;color:var(--ink);letter-spacing:.02em}
+  .card-tag{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink-light);background:var(--cream-dark);padding:2px 8px;border-radius:4px;letter-spacing:.04em}
 
-  /* ── COURSE HEADER ── */
-  .course-header {
-    background: var(--navy);
-    border-radius: var(--radius-lg);
-    padding: 28px 32px;
-    margin-bottom: 20px;
-    position: relative;
-    overflow: hidden;
-  }
-  .course-header::before {
-    content: '';
-    position: absolute;
-    top: -40px; right: -40px;
-    width: 200px; height: 200px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(212,168,67,0.12) 0%, transparent 70%);
-  }
-  .course-header::after {
-    content: '';
-    position: absolute;
-    bottom: -20px; left: 160px;
-    width: 120px; height: 120px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(100,120,200,0.08) 0%, transparent 70%);
-  }
-  .ch-eyebrow {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    color: var(--gold);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-  }
-  .ch-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: 28px;
-    color: #fff;
-    line-height: 1.2;
-    margin-bottom: 10px;
-  }
-  .ch-subtitle {
-    font-size: 13px;
-    color: rgba(255,255,255,0.45);
-    font-family: 'IBM Plex Mono', monospace;
-    margin-bottom: 20px;
-  }
-  .ch-pills {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-  .pill {
-    font-size: 11px;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-family: 'IBM Plex Mono', monospace;
-    letter-spacing: 0.03em;
-    border: 1px solid;
-  }
-  .pill-gold { color: var(--gold-light); border-color: rgba(212,168,67,0.35); background: rgba(212,168,67,0.1); }
-  .pill-gray { color: rgba(255,255,255,0.35); border-color: rgba(255,255,255,0.12); }
+  /* SUMMARY */
+  .summary-text{font-size:14px;color:var(--ink-mid);line-height:1.85;padding:14px 18px;background:var(--cream);border-radius:8px;border-left:3px solid var(--gold)}
 
-  /* ── CARDS ── */
-  .card {
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 22px 24px;
-    margin-bottom: 16px;
-    box-shadow: var(--shadow-sm);
-    animation: fadeUp 0.4s ease both;
-  }
-  .card:nth-child(1) { animation-delay: 0.05s; }
-  .card:nth-child(2) { animation-delay: 0.1s; }
-  .card:nth-child(3) { animation-delay: 0.15s; }
-  .card:nth-child(4) { animation-delay: 0.2s; }
-  .card:nth-child(5) { animation-delay: 0.25s; }
+  /* PATH */
+  .path-row{display:flex;align-items:center;flex-wrap:wrap;gap:6px 0;margin-top:4px}
+  .path-node{display:flex;align-items:center}
+  .path-item{font-family:'IBM Plex Mono',monospace;font-size:11px;padding:5px 12px;border-radius:6px;border:1px solid var(--border);color:var(--ink-light);background:var(--cream);white-space:nowrap}
+  .path-item.current{background:var(--navy);color:var(--gold-light);border-color:var(--navy);font-weight:500}
+  .path-item.done{background:var(--green-pale);color:var(--green);border-color:rgba(46,125,82,.2)}
+  .path-arrow{width:24px;text-align:center;color:var(--border-dark);font-size:12px;flex-shrink:0}
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+  /* SECTION LABEL */
+  .section-label{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink-light);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+  .section-label::after{content:'';flex:1;height:1px;background:var(--border)}
 
-  .card-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 16px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid var(--border);
-  }
-  .card-icon {
-    width: 32px; height: 32px;
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 15px;
-    flex-shrink: 0;
-  }
-  .ci-gold { background: var(--gold-pale); }
-  .ci-green { background: var(--green-pale); }
-  .ci-red { background: var(--red-pale); }
-  .ci-amber { background: var(--amber-pale); }
-  .ci-navy { background: rgba(18,23,43,0.06); }
+  /* KP */
+  .kp-block{margin-bottom:20px;padding-bottom:20px;border-bottom:1px dashed var(--border)}
+  .kp-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+  .kp-name{font-family:'Noto Serif SC',serif;font-size:14px;font-weight:600;color:var(--ink);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+  .kp-num{width:22px;height:22px;border-radius:50%;background:var(--navy);color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .meta-row{display:grid;grid-template-columns:80px 1fr;gap:4px 12px;font-size:13px;margin-bottom:6px}
+  .meta-label{color:var(--ink-light);font-family:'IBM Plex Mono',monospace;font-size:11px;padding-top:2px;white-space:nowrap}
+  .meta-value{color:var(--ink-mid);line-height:1.7}
 
-  .card-title {
-    font-family: 'Noto Serif SC', serif;
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--ink);
-    letter-spacing: 0.02em;
-  }
-  .card-tag {
-    margin-left: auto;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    color: var(--ink-light);
-    background: var(--cream-dark);
-    padding: 2px 8px;
-    border-radius: 4px;
-    letter-spacing: 0.04em;
-  }
+  /* RULE GRID */
+  .rule-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
+  .rule-box{border-radius:10px;padding:16px;border:1px solid}
+  .rule-box.up{background:var(--green-pale);border-color:rgba(46,125,82,.2)}
+  .rule-box.down{background:var(--red-pale);border-color:rgba(185,64,64,.2)}
+  .rule-title{font-family:'Noto Serif SC',serif;font-size:13px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+  .rule-title.up{color:var(--green)}.rule-title.down{color:var(--red)}
+  .rule-item{font-size:12.5px;display:flex;align-items:baseline;gap:6px;margin-bottom:5px;color:var(--ink-mid)}
+  .rule-key{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;white-space:nowrap}
+  .rule-key.up{color:var(--green)}.rule-key.down{color:var(--red)}
+  .rule-tip{margin-top:10px;padding:8px 12px;background:var(--amber-pale);border-radius:6px;border-left:2px solid var(--amber);font-size:12px;color:var(--amber);font-family:'IBM Plex Mono',monospace}
 
-  /* ── CORE SUMMARY ── */
-  .summary-text {
-    font-size: 14px;
-    color: var(--ink-mid);
-    line-height: 1.85;
-    padding: 14px 18px;
-    background: var(--cream);
-    border-radius: 8px;
-    border-left: 3px solid var(--gold);
-  }
+  /* TABLE */
+  .info-table{width:100%;border-collapse:collapse;font-size:12.5px;margin:10px 0}
+  .info-table th{background:var(--cream);padding:8px 12px;text-align:left;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink-light);border-bottom:1px solid var(--border);letter-spacing:.05em;font-weight:400}
+  .info-table td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--ink-mid);vertical-align:top;line-height:1.6}
+  .info-table tr:last-child td{border-bottom:none}
 
-  /* ── LEARNING PATH ── */
-  .path-row {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    flex-wrap: wrap;
-    gap: 6px 0;
-    margin-top: 4px;
-  }
-  .path-node {
-    display: flex;
-    align-items: center;
-    gap: 0;
-  }
-  .path-item {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    padding: 5px 12px;
-    border-radius: 6px;
-    border: 1px solid var(--border);
-    color: var(--ink-light);
-    background: var(--cream);
-    white-space: nowrap;
-  }
-  .path-item.current {
-    background: var(--navy);
-    color: var(--gold-light);
-    border-color: var(--navy);
-    font-weight: 500;
-  }
-  .path-item.done {
-    background: var(--green-pale);
-    color: var(--green);
-    border-color: rgba(46,125,82,0.2);
-  }
-  .path-arrow {
-    width: 24px;
-    text-align: center;
-    color: var(--border-dark);
-    font-size: 12px;
-    flex-shrink: 0;
-  }
+  /* CONDITIONS */
+  .cond-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}
+  .cond-box{border-radius:8px;padding:14px;border:1px solid var(--border);background:var(--cream)}
+  .cond-label{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:.1em;margin-bottom:6px}
+  .cond-text{font-size:12.5px;color:var(--ink);font-weight:500;margin-bottom:4px}
+  .cond-sub{font-size:12px;color:var(--ink-light);line-height:1.6}
 
-  /* ── KNOWLEDGE SECTION ── */
-  .section-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    color: var(--ink-light);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .section-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
+  /* SCENES */
+  .scene-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+  .scene-box{border-radius:8px;padding:14px 16px;border:1px solid var(--border);background:var(--cream)}
+  .scene-num{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:.1em;margin-bottom:5px}
+  .scene-title{font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:8px;font-family:'Noto Serif SC',serif}
+  .scene-body{font-size:12px;color:var(--ink-mid);line-height:1.75}
 
-  .kp-block {
-    margin-bottom: 20px;
-    padding-bottom: 20px;
-    border-bottom: 1px dashed var(--border);
-  }
-  .kp-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-  .kp-name {
-    font-family: 'Noto Serif SC', serif;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--ink);
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .kp-num {
-    width: 22px; height: 22px;
-    border-radius: 50%;
-    background: var(--navy);
-    color: var(--gold-light);
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
+  /* ENTRY */
+  .entry-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+  .entry-box{border-radius:8px;padding:14px 16px;border:1px solid var(--border);background:var(--cream)}
+  .entry-type{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--ink-light);letter-spacing:.08em;margin-bottom:6px}
+  .entry-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:8px}
+  .entry-row{display:flex;gap:7px;font-size:12px;color:var(--ink-mid);margin-bottom:5px;line-height:1.6;align-items:flex-start}
+  .dot-plus{color:var(--green);font-size:14px;line-height:1.3;flex-shrink:0}
+  .dot-minus{color:var(--red);font-size:14px;line-height:1.3;flex-shrink:0}
 
-  .meta-row {
-    display: grid;
-    grid-template-columns: 80px 1fr;
-    gap: 4px 12px;
-    font-size: 13px;
-    margin-bottom: 6px;
-  }
-  .meta-label {
-    color: var(--ink-light);
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    padding-top: 2px;
-    white-space: nowrap;
-  }
-  .meta-value { color: var(--ink-mid); line-height: 1.7; }
+  /* DIAGRAM */
+  .diagram-wrap{background:var(--cream);border-radius:10px;padding:20px;overflow-x:auto}
 
-  /* ── MERGE RULES TABLE ── */
-  .rule-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-top: 8px;
-  }
-  .rule-box {
-    border-radius: 10px;
-    padding: 16px;
-    border: 1px solid;
-  }
-  .rule-box.up {
-    background: var(--green-pale);
-    border-color: rgba(46,125,82,0.2);
-  }
-  .rule-box.down {
-    background: var(--red-pale);
-    border-color: rgba(185,64,64,0.2);
-  }
-  .rule-title {
-    font-family: 'Noto Serif SC', serif;
-    font-size: 13px;
-    font-weight: 600;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .rule-title.up { color: var(--green); }
-  .rule-title.down { color: var(--red); }
-  .rule-item {
-    font-size: 12.5px;
-    display: flex;
-    align-items: baseline;
-    gap: 6px;
-    margin-bottom: 5px;
-    color: var(--ink-mid);
-  }
-  .rule-key {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    font-weight: 500;
-    white-space: nowrap;
-  }
-  .rule-key.up { color: var(--green); }
-  .rule-key.down { color: var(--red); }
+  /* RULES LIST */
+  .rules-list{list-style:none}
+  .rules-list li{display:flex;gap:10px;font-size:13px;color:var(--ink-mid);padding:8px 0;border-bottom:1px dashed var(--border);line-height:1.6;align-items:flex-start}
+  .rules-list li:last-child{border-bottom:none}
+  .rule-bullet{width:20px;height:20px;border-radius:5px;background:var(--gold-pale);border:1px solid rgba(212,168,67,.3);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--gold);flex-shrink:0;margin-top:2px}
 
-  .rule-tip {
-    margin-top: 10px;
-    padding: 8px 12px;
-    background: var(--amber-pale);
-    border-radius: 6px;
-    border-left: 2px solid var(--amber);
-    font-size: 12px;
-    color: var(--amber);
-    font-family: 'IBM Plex Mono', monospace;
-  }
+  /* Q&A */
+  .qa-item{margin-bottom:14px;padding-bottom:14px;border-bottom:1px dashed var(--border)}
+  .qa-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+  .qa-q{display:flex;gap:8px;font-size:13px;color:var(--ink);font-weight:500;margin-bottom:6px;align-items:flex-start}
+  .qa-badge{font-family:'IBM Plex Mono',monospace;font-size:10px;width:22px;height:22px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-weight:500}
+  .qa-badge.q{background:var(--navy);color:var(--gold-light)}
+  .qa-badge.a{background:var(--green-pale);color:var(--green)}
+  .qa-a{display:flex;gap:8px;font-size:13px;color:var(--ink-mid);line-height:1.75;padding-left:4px}
 
-  /* ── K-LINE SVG DIAGRAM ── */
-  .diagram-wrap {
-    background: var(--cream);
-    border-radius: 10px;
-    padding: 20px;
-    overflow-x: auto;
-  }
+  /* SIDEBAR */
+  .sidebar{display:flex;flex-direction:column;gap:16px;position:sticky;top:72px}
+  .scard{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow-sm)}
+  .scard-title{font-family:'Noto Serif SC',serif;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:14px;display:flex;align-items:center;gap:7px}
+  .scard-title-dot{width:5px;height:5px;border-radius:50%;background:var(--gold)}
+  .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .stat-box{background:var(--navy);border-radius:8px;padding:12px;text-align:center}
+  .stat-n{font-family:'DM Serif Display',serif;font-size:28px;color:var(--gold-light);line-height:1;margin-bottom:4px}
+  .stat-l{font-family:'IBM Plex Mono',monospace;font-size:10px;color:rgba(255,255,255,.4);letter-spacing:.06em}
+  .prog-item{margin-bottom:12px}
+  .prog-item:last-child{margin-bottom:0}
+  .prog-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+  .prog-name{font-size:12px;color:var(--ink-mid);font-family:'IBM Plex Mono',monospace}
+  .prog-pct{font-size:11px;color:var(--ink-light);font-family:'IBM Plex Mono',monospace}
+  .prog-track{height:5px;background:var(--cream-dark);border-radius:3px;overflow:hidden}
+  .prog-fill{height:100%;border-radius:3px;background:var(--gold);transition:width 1s cubic-bezier(.4,0,.2,1)}
+  .prog-fill.done{background:var(--green)}
+  .prog-fill.zero{background:var(--border-dark)}
+  .origin-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px dashed var(--border);align-items:flex-start}
+  .origin-item:last-child{border-bottom:none}
+  .origin-year{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--gold);background:var(--gold-pale);padding:2px 6px;border-radius:4px;white-space:nowrap;margin-top:2px}
+  .origin-text{font-size:12px;color:var(--ink-mid);line-height:1.6}
 
-  /* ── QUICK RULES ── */
-  .rules-list { list-style: none; }
-  .rules-list li {
-    display: flex;
-    gap: 10px;
-    font-size: 13px;
-    color: var(--ink-mid);
-    padding: 8px 0;
-    border-bottom: 1px dashed var(--border);
-    line-height: 1.6;
-    align-items: flex-start;
-  }
-  .rules-list li:last-child { border-bottom: none; }
-  .rule-bullet {
-    width: 20px; height: 20px;
-    border-radius: 5px;
-    background: var(--gold-pale);
-    border: 1px solid rgba(212,168,67,0.3);
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 9px;
-    color: var(--gold);
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
+  /* FOOTER */
+  .footer-note{text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-light);margin-top:32px;padding-top:20px;border-top:1px solid var(--border);letter-spacing:.05em}
 
-  /* ── Q&A ── */
-  .qa-item {
-    margin-bottom: 14px;
-    padding-bottom: 14px;
-    border-bottom: 1px dashed var(--border);
-  }
-  .qa-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-  .qa-q {
-    display: flex;
-    gap: 8px;
-    font-size: 13px;
-    color: var(--ink);
-    font-weight: 500;
-    margin-bottom: 6px;
-    align-items: flex-start;
-  }
-  .qa-badge {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    width: 22px;
-    height: 22px;
-    border-radius: 5px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    margin-top: 1px;
-    font-weight: 500;
-  }
-  .qa-badge.q { background: var(--navy); color: var(--gold-light); }
-  .qa-badge.a { background: var(--green-pale); color: var(--green); }
-  .qa-a {
-    display: flex;
-    gap: 8px;
-    font-size: 13px;
-    color: var(--ink-mid);
-    line-height: 1.75;
-    padding-left: 4px;
-  }
-  .qa-who {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    color: var(--ink-light);
-    background: var(--cream-dark);
-    padding: 1px 6px;
-    border-radius: 3px;
-    height: fit-content;
-    margin-top: 2px;
-    white-space: nowrap;
-  }
-
-  /* ── ERROR LOG ── */
-  .error-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 12.5px;
-  }
-  .error-table th {
-    background: var(--cream);
-    padding: 8px 12px;
-    text-align: left;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    color: var(--ink-light);
-    letter-spacing: 0.08em;
-    border-bottom: 1px solid var(--border);
-    font-weight: 400;
-  }
-  .error-table td {
-    padding: 9px 12px;
-    border-bottom: 1px solid var(--border);
-    color: var(--ink-mid);
-    vertical-align: top;
-    line-height: 1.6;
-  }
-  .error-table tr:last-child td { border-bottom: none; }
-  .error-table tr:hover td { background: var(--cream); }
-  .err-from {
-    font-family: 'IBM Plex Mono', monospace;
-    color: var(--red);
-    text-decoration: line-through;
-    font-size: 12px;
-  }
-  .err-to {
-    font-family: 'IBM Plex Mono', monospace;
-    color: var(--green);
-    font-size: 12px;
-    font-weight: 500;
-  }
-  .err-arrow { color: var(--border-dark); padding: 0 4px; }
-
-  /* ── SIDEBAR ── */
-  .sidebar { display: flex; flex-direction: column; gap: 16px; }
-
-  .scard {
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 18px 20px;
-    box-shadow: var(--shadow-sm);
-    animation: fadeUp 0.4s ease both;
-  }
-  .scard:nth-child(1) { animation-delay: 0.1s; }
-  .scard:nth-child(2) { animation-delay: 0.18s; }
-  .scard:nth-child(3) { animation-delay: 0.26s; }
-
-  .scard-title {
-    font-family: 'Noto Serif SC', serif;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--ink);
-    margin-bottom: 14px;
-    display: flex;
-    align-items: center;
-    gap: 7px;
-  }
-  .scard-title-dot {
-    width: 5px; height: 5px;
-    border-radius: 50%;
-    background: var(--gold);
-  }
-
-  /* Stat numbers */
-  .stat-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-  .stat-box {
-    background: var(--navy);
-    border-radius: 8px;
-    padding: 12px;
-    text-align: center;
-  }
-  .stat-n {
-    font-family: 'DM Serif Display', serif;
-    font-size: 28px;
-    color: var(--gold-light);
-    line-height: 1;
-    margin-bottom: 4px;
-  }
-  .stat-l {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    color: rgba(255,255,255,0.4);
-    letter-spacing: 0.06em;
-  }
-
-  /* Progress */
-  .prog-item {
-    margin-bottom: 12px;
-  }
-  .prog-item:last-child { margin-bottom: 0; }
-  .prog-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 5px;
-  }
-  .prog-name {
-    font-size: 12px;
-    color: var(--ink-mid);
-    font-family: 'IBM Plex Mono', monospace;
-  }
-  .prog-pct {
-    font-size: 11px;
-    color: var(--ink-light);
-    font-family: 'IBM Plex Mono', monospace;
-  }
-  .prog-track {
-    height: 5px;
-    background: var(--cream-dark);
-    border-radius: 3px;
-    overflow: hidden;
-  }
-  .prog-fill {
-    height: 100%;
-    border-radius: 3px;
-    background: var(--gold);
-    transition: width 1s cubic-bezier(0.4,0,0.2,1);
-  }
-  .prog-fill.done { background: var(--green); }
-  .prog-fill.zero { background: var(--border-dark); }
-
-  /* Origins */
-  .origin-item {
-    display: flex;
-    gap: 10px;
-    padding: 8px 0;
-    border-bottom: 1px dashed var(--border);
-    align-items: flex-start;
-  }
-  .origin-item:last-child { border-bottom: none; }
-  .origin-year {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    color: var(--gold);
-    background: var(--gold-pale);
-    padding: 2px 6px;
-    border-radius: 4px;
-    white-space: nowrap;
-    margin-top: 2px;
-  }
-  .origin-text {
-    font-size: 12px;
-    color: var(--ink-mid);
-    line-height: 1.6;
-  }
-
-  /* ── SECTION TABS within page ── */
-  .section-nav {
-    display: flex;
-    gap: 4px;
-    margin-bottom: 6px;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .section-nav::-webkit-scrollbar { display: none; }
-
-  /* ── FOOTER NOTE ── */
-  .footer-note {
-    text-align: center;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    color: var(--ink-light);
-    margin-top: 32px;
-    padding-top: 20px;
-    border-top: 1px solid var(--border);
-    letter-spacing: 0.05em;
-  }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 900px) {
-    .shell { grid-template-columns: 1fr; }
-    .rule-grid { grid-template-columns: 1fr; }
-  }
-  @media (max-width: 640px) {
-    .shell { padding: 16px 16px 40px; }
-    .topnav-inner { padding: 0 16px; }
-  }
+  @media(max-width:900px){.shell{grid-template-columns:1fr}.sidebar{position:static}.rule-grid,.cond-grid,.scene-grid,.entry-grid{grid-template-columns:1fr}}
+  @media(max-width:640px){.shell{padding:16px 16px 40px}.topnav-inner{padding:0 16px}}
 </style>
 </head>
 <body>
 
-<!-- TOP NAV -->
 <nav class="topnav">
   <div class="topnav-inner">
     <div class="logo"><div class="logo-dot"></div> ChanlunNotes</div>
     <div class="nav-tabs">
-      <button class="nav-tab active">K线合并</button>
-      <button class="nav-tab">顶底分型</button>
-      <button class="nav-tab">笔</button>
-      <button class="nav-tab">线段</button>
-      <button class="nav-tab">中枢</button>
-      <button class="nav-tab">走势类型</button>
-      <button class="nav-tab">背驰</button>
-      <button class="nav-tab">三类买卖点</button>
+      <button class="nav-tab active" data-lesson="0">K线合并</button>
+      <button class="nav-tab" data-lesson="1">顶底分型</button>
+      <button class="nav-tab" data-lesson="-1">笔</button>
+      <button class="nav-tab" data-lesson="-1">线段</button>
+      <button class="nav-tab" data-lesson="-1">中枢</button>
+      <button class="nav-tab" data-lesson="-1">走势类型</button>
+      <button class="nav-tab" data-lesson="-1">背驰</button>
+      <button class="nav-tab" data-lesson="-1">三类买卖点</button>
     </div>
-    <div class="nav-badge">第 1 课 / 共 8 节</div>
+    <div class="nav-badge" id="nav-badge">第 1 课 / 共 8 节</div>
   </div>
 </nav>
 
-<!-- MAIN SHELL -->
 <div class="shell">
+<main>
 
-  <!-- ── LEFT MAIN CONTENT ── -->
-  <main>
+<!-- ══════════════════════════════════════
+     LESSON 01 · K线合并
+══════════════════════════════════════ -->
+<div class="lesson-panel active" id="lesson-0">
 
-    <!-- Course header -->
-    <div class="course-header">
-      <div class="ch-eyebrow">缠论入门系列 · Lesson 01</div>
-      <div class="ch-title">K 线 合 并</div>
-      <div class="ch-pills">
-        <span class="pill pill-gold">缠论基础</span>
-        <span class="pill pill-gold">K线处理</span>
-        <span class="pill pill-gray">禅师原著整理</span>
-        <span class="pill pill-gray">含转写纠错</span>
-        <span class="pill pill-gray">含SVG示意图</span>
+  <div class="course-header">
+    <div class="ch-eyebrow">缠论入门系列 · Lesson 01</div>
+    <div class="ch-title">K 线 合 并</div>
+    <div class="ch-pills">
+      <span class="pill pill-gold">缠论基础</span>
+      <span class="pill pill-gold">K线处理</span>
+      <span class="pill pill-gray">禅师原著整理</span>
+      <span class="pill pill-gray">含SVG示意图</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-icon ci-gold">🎯</div><div class="card-title">本节核心</div><div class="card-tag">OVERVIEW</div></div>
+    <div class="summary-text">K线合并是缠论七大零件的<strong>第一步</strong>，其目的是剔除市场中细小波动的噪音，将有包含关系的K线合并为一根没有引线的实体K线，从而形成一张更清晰的盘面供后续分析顶底分型、笔与线段使用。掌握「上升取高，下降取低」口诀，是学习后续所有缠论概念的根基。</div>
+    <div style="margin-top:18px;">
+      <div class="section-label">学习路径</div>
+      <div class="path-row">
+        <div class="path-node"><div class="path-item done">起源背景</div><div class="path-arrow">→</div></div>
+        <div class="path-node"><div class="path-item current">K线合并 ◀</div><div class="path-arrow">→</div></div>
+        <div class="path-node"><div class="path-item">顶底分型</div><div class="path-arrow">→</div></div>
+        <div class="path-node"><div class="path-item">笔</div><div class="path-arrow">→</div></div>
+        <div class="path-node"><div class="path-item">线段</div><div class="path-arrow">→</div></div>
+        <div class="path-node"><div class="path-item">中枢</div><div class="path-arrow">→</div></div>
+        <div class="path-node"><div class="path-item">背驰</div><div class="path-arrow">→</div></div>
+        <div class="path-item">三类买卖点</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-icon ci-navy">📖</div><div class="card-title">知识点详解</div><div class="card-tag">DETAILS</div></div>
+    <div class="kp-block">
+      <div class="kp-name"><div class="kp-num">1</div> 缠论K线的特殊性</div>
+      <div class="meta-row"><div class="meta-label">定义</div><div class="meta-value">缠论K线<strong>没有引线（上下影线）</strong>，只有实体部分。每根K线只有一个高点和一个低点。</div></div>
+      <div class="meta-row"><div class="meta-label">原理</div><div class="meta-value">禅师认为，价格只要到过某个位置（哪怕只是影线触及），就视为实实在在到过，因此将影线并入实体。</div></div>
+      <div class="meta-row"><div class="meta-label">实操意义</div><div class="meta-value">形成「只有实体」的标准K线图，消除影线带来的视觉干扰。</div></div>
+    </div>
+    <div class="kp-block">
+      <div class="kp-name"><div class="kp-num">2</div> 为什么要合并K线？</div>
+      <div class="meta-row"><div class="meta-label">问题</div><div class="meta-value">盘面上存在大量细小、无方向感的波动，对看盘人形成干扰，称为<strong>噪音（杂讯）</strong>。</div></div>
+      <div class="meta-row"><div class="meta-label">解法</div><div class="meta-value">将有包含关系（内包/外包）的K线合并成一根，剔除这些无效波动，得到更干净的K线图。</div></div>
+      <div class="meta-row"><div class="meta-label">注意</div><div class="meta-value">实操时<strong>无需对所有历史K线逐一合并</strong>，等全部合并完行情已结束；重点在于理解形成逻辑与形态识别。</div></div>
+    </div>
+    <div class="kp-block">
+      <div class="kp-name"><div class="kp-num">3</div> 合并触发条件</div>
+      <div class="meta-row"><div class="meta-label">触发</div><div class="meta-value">两根K线之间出现<strong>内包</strong>或<strong>外包</strong>关系，必须合并。</div></div>
+      <div class="meta-row"><div class="meta-label">循环</div><div class="meta-value">合并后生成的新K线若与相邻K线再次发生包含关系，需<strong>继续合并</strong>，直到盘面上所有K线不再有包含关系为止。</div></div>
+    </div>
+    <div class="kp-block">
+      <div class="kp-name"><div class="kp-num">4</div> 合并口诀 ⭐</div>
+      <div class="meta-row"><div class="meta-label">判断趋势</div><div class="meta-value">看<strong>发生包含关系之前那根K线</strong>的运动方向（涨上来 = 上升；跌下来 = 下降）</div></div>
+      <div class="rule-grid">
+        <div class="rule-box up"><div class="rule-title up">📈 上升趋势</div><div class="rule-item"><span class="rule-key up">高点 →</span>取两根K线中 <strong>最高价</strong></div><div class="rule-item"><span class="rule-key up">低点 →</span>取两根K线中 <strong>较高的低价</strong></div></div>
+        <div class="rule-box down"><div class="rule-title down">📉 下降趋势</div><div class="rule-item"><span class="rule-key down">高点 →</span>取两根K线中 <strong>较低的高价</strong></div><div class="rule-item"><span class="rule-key down">低点 →</span>取两根K线中 <strong>最低价</strong></div></div>
+      </div>
+      <div class="rule-tip">💡 速记：上升「取高高、取低高」；下降「取高低、取低低」</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-icon ci-amber">📊</div><div class="card-title">K线合并示意图</div><div class="card-tag">DIAGRAM</div></div>
+    <div class="diagram-wrap">
+      <svg width="100%" viewBox="0 0 680 360" xmlns="http://www.w3.org/2000/svg" style="display:block;">
+        <defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+        <rect x="10" y="10" width="310" height="280" rx="10" fill="#edf7f2" opacity="0.6"/>
+        <rect x="360" y="10" width="310" height="280" rx="10" fill="#fdf0f0" opacity="0.6"/>
+        <text x="165" y="34" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="11" fill="#2e7d52" letter-spacing="0.08em">上升趋势合并</text>
+        <text x="515" y="34" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="11" fill="#b94040" letter-spacing="0.08em">下降趋势合并</text>
+        <rect x="38" y="175" width="22" height="60" rx="2" fill="#2e7d52" opacity="0.3"/>
+        <rect x="68" y="145" width="22" height="70" rx="2" fill="#2e7d52" opacity="0.3"/>
+        <text x="66" y="238" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#9ab" opacity="0.7">趋势</text>
+        <rect x="102" y="110" width="72" height="105" rx="5" fill="none" stroke="#d4a843" stroke-width="1.2" stroke-dasharray="5 3"/>
+        <text x="138" y="95" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#d4a843">内包关系</text>
+        <rect x="108" y="115" width="26" height="96" rx="2" fill="#2e7d52" opacity="0.75"/>
+        <text x="121" y="110" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#2e7d52">高A=200</text>
+        <text x="121" y="224" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#2e7d52">低A=110</text>
+        <rect x="142" y="135" width="26" height="62" rx="2" fill="#2e7d52" opacity="0.4"/>
+        <text x="155" y="130" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#2e7d52">高B=180</text>
+        <text x="155" y="210" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#2e7d52">低B=135</text>
+        <line x1="190" y1="163" x2="214" y2="163" stroke="#888" stroke-width="1.2" marker-end="url(#arr)"/>
+        <text x="202" y="157" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#888">合并</text>
+        <rect x="220" y="115" width="36" height="82" rx="3" fill="#2e7d52" opacity="0.9"/>
+        <text x="238" y="110" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#2e7d52" font-weight="500">↑ 200（最高）</text>
+        <text x="238" y="213" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#2e7d52" font-weight="500">↑ 135（较高低）</text>
+        <rect x="28" y="302" width="280" height="36" rx="6" fill="#fff" stroke="#d4e8dc" stroke-width="1"/>
+        <text x="168" y="316" text-anchor="middle" font-family="'Noto Sans SC',sans-serif" font-size="11" fill="#2e7d52">高点取最高 · 低点取较高的低价</text>
+        <text x="168" y="330" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#9ab">High = max(高A,高B)  Low = max(低A,低B)</text>
+        <rect x="388" y="100" width="22" height="75" rx="2" fill="#b94040" opacity="0.3"/>
+        <rect x="418" y="120" width="22" height="95" rx="2" fill="#b94040" opacity="0.3"/>
+        <text x="416" y="228" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#9ab" opacity="0.7">趋势</text>
+        <rect x="452" y="95" width="72" height="110" rx="5" fill="none" stroke="#d4a843" stroke-width="1.2" stroke-dasharray="5 3"/>
+        <text x="488" y="80" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#d4a843">内包关系</text>
+        <rect x="458" y="100" width="26" height="100" rx="2" fill="#b94040" opacity="0.75"/>
+        <text x="471" y="95" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#b94040">高C=190</text>
+        <text x="471" y="215" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#b94040">低C=90</text>
+        <rect x="492" y="115" width="26" height="70" rx="2" fill="#b94040" opacity="0.4"/>
+        <text x="505" y="110" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#b94040">高D=170</text>
+        <text x="505" y="198" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#b94040">低D=105</text>
+        <line x1="535" y1="158" x2="558" y2="158" stroke="#888" stroke-width="1.2" marker-end="url(#arr)"/>
+        <text x="547" y="152" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#888">合并</text>
+        <rect x="564" y="113" width="36" height="87" rx="3" fill="#b94040" opacity="0.9"/>
+        <text x="582" y="108" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#b94040" font-weight="500">↓ 170（较低高）</text>
+        <text x="582" y="215" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#b94040" font-weight="500">↓ 90（最低）</text>
+        <rect x="378" y="302" width="280" height="36" rx="6" fill="#fff" stroke="#e8d4d4" stroke-width="1"/>
+        <text x="518" y="316" text-anchor="middle" font-family="'Noto Sans SC',sans-serif" font-size="11" fill="#b94040">高点取较低 · 低点取最低价</text>
+        <text x="518" y="330" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#9ab">High = min(高C,高D)  Low = min(低C,低D)</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-icon ci-gold">🔑</div><div class="card-title">关键规则速记</div><div class="card-tag">QUICK REF</div></div>
+    <ul class="rules-list">
+      <li><div class="rule-bullet">01</div>只要两根K线存在内包或外包关系，就必须合并，不允许跳过。</li>
+      <li><div class="rule-bullet">02</div>合并后的缠论K线<strong>无引线</strong>，只有实体——价格到过的位置即为实体边界。</li>
+      <li><div class="rule-bullet">03</div>趋势判断：看触发包含关系<strong>之前</strong>那根K线的运动方向（涨→上升，跌→下降）。</li>
+      <li><div class="rule-bullet">04</div>上升趋势：高点取最高，低点取两者中<strong>较高</strong>的低价（防止合并后下移）。</li>
+      <li><div class="rule-bullet">05</div>下降趋势：低点取最低，高点取两者中<strong>较低</strong>的高价（防止合并后上移）。</li>
+      <li><div class="rule-bullet">06</div>合并后若新K线与后续K线<strong>再次</strong>产生包含关系，需继续合并，直到完全消除为止。</li>
+      <li><div class="rule-bullet">07</div>实操时无需1:1逐一合并所有历史K线，重点是理解底层逻辑、识别形态，防止行情结束才动手。</li>
+      <li><div class="rule-bullet">08</div>缠论可与量价分析<strong>叠加使用</strong>，量价为辅助共振条件，两者无排他性。</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-icon ci-green">❓</div><div class="card-title">课堂答疑摘要</div><div class="card-tag">Q &amp; A</div></div>
+    <div class="qa-item"><div class="qa-q"><span class="qa-badge q">Q</span>合并K线是否会忽略真实价格信息？</div><div class="qa-a"><span class="qa-badge a">A</span>合并并不丢失信息，而是以新视角呈现。只要存在包含关系就必须合并，这是缠论的基本规则。合并后信息仍完整，只是噪音被剔除了。</div></div>
+    <div class="qa-item"><div class="qa-q"><span class="qa-badge q">Q</span>缠论能否与量价分析一起使用？</div><div class="qa-a"><span class="qa-badge a">A</span>可以。缠论对量价没有排他性，量价分析可以作为「叠 buff」的辅助共振条件，所有理论都可以组合使用。</div></div>
+    <div class="qa-item"><div class="qa-q"><span class="qa-badge q">Q</span>旗杆末端如何确定？</div><div class="qa-a"><span class="qa-badge a">A</span>只要该位置开始回调，就可以确定为末端。回调开始后，结合趋势K线和三种K线反转形态来判断具体位置。</div></div>
+    <div class="qa-item"><div class="qa-q"><span class="qa-badge q">Q</span>有没有专门自动合并缠论K线的工具或指标？</div><div class="qa-a"><span class="qa-badge a">A</span>有。常见看盘软件中可以搜索缠论相关指标，但建议先理解底层逻辑再使用，否则工具给结果你也不知道为什么，遇到特殊情况就会懵。</div></div>
+  </div>
+
+  <div class="footer-note">ChanlunNotes · 缠论入门系列 · Lesson 01 of 08 · 内容由AI整理，仅供学习复习参考</div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     LESSON 02 · 顶底分型与笔
+══════════════════════════════════════ -->
+<div class="lesson-panel" id="lesson-1">
+
+  <div class="course-header">
+    <div class="ch-eyebrow">缠论入门系列 · Lesson 02</div>
+    <div class="ch-title">顶底分型与笔</div>
+    <div class="ch-pills">
+      <span class="pill pill-gold">顶底分型</span>
+      <span class="pill pill-gold">强弱判断</span>
+      <span class="pill pill-gray">含三类应用场景</span>
+      <span class="pill pill-gray">含SVG示意图</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-icon ci-gold">🎯</div><div class="card-title">本节核心</div><div class="card-tag">OVERVIEW</div></div>
+    <div class="summary-text">顶底分型是缠论七大零件的<strong>第二步</strong>，也是识别「笔」的必要前提。将K线合并后，在局部高点出现的三根K线组合称为<strong>顶分型</strong>，低点的称为<strong>底分型</strong>。分型有强弱之分，只操作<strong>满足三个条件的强分型</strong>，可在关键位、旗形形态、123法则三类场景中作为进场依据。</div>
+    <div style="margin-top:18px;">
+      <div class="section-label">学习路径</div>
+      <div class="path-row">
+        <div class="path-node"><div class="path-item done">起源背景</div><div class="path-arrow">→</div></div>
+        <div class="path-node"><div class="path-item done">K线合并 ✓</div><div class="path-arrow">→</div></div>
+        <div class="path-node"><div class="path-item current">顶底分型 ◀</div><div class="path-arrow">→</div></div>
+        <div class="path-node"><div class="path-item">笔</div><div class="path-arrow">→</div></div>
+        <div class="path-node"><div class="path-item">线段</div><div class="path-arrow">→</div></div>
+        <div class="path-node"><div class="path-item">中枢</div><div class="path-arrow">→</div></div>
+        <div class="path-node"><div class="path-item">背驰</div><div class="path-arrow">→</div></div>
+        <div class="path-item">三类买卖点</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-icon ci-navy">📖</div><div class="card-title">知识点详解</div><div class="card-tag">DETAILS</div></div>
+    <div class="kp-block">
+      <div class="kp-name"><div class="kp-num">1</div> 顶底分型 — 定义与结构</div>
+      <div class="meta-row"><div class="meta-label">前提</div><div class="meta-value">必须先完成K线合并，保证三根K线之间<strong>无包含关系</strong>，才能识别分型。</div></div>
+      <div class="meta-row"><div class="meta-label">顶分型</div><div class="meta-value">中间K线<strong>高点最高</strong>，两侧K线均低于中间 → 局部顶部，看空信号。</div></div>
+      <div class="meta-row"><div class="meta-label">底分型</div><div class="meta-value">中间K线<strong>低点最低</strong>，两侧K线均高于中间 → 局部底部，看多信号。</div></div>
+      <div class="meta-row"><div class="meta-label">镜像原则</div><div class="meta-value">底分型 = 顶分型翻转，所有规则完全对称；缠论K线不区分阴阳，只看高低点。</div></div>
+      <table class="info-table" style="margin-top:12px;">
+        <thead><tr><th>类型</th><th>中间K特征</th><th>信号</th><th>操作</th></tr></thead>
+        <tbody>
+          <tr><td style="color:var(--red);font-weight:500;">顶分型</td><td>中间K高点最高，两侧K均低</td><td>看空</td><td>考虑做空</td></tr>
+          <tr><td style="color:var(--green);font-weight:500;">底分型</td><td>中间K低点最低，两侧K均高</td><td>看多</td><td>考虑做多</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="kp-block">
+      <div class="kp-name"><div class="kp-num">2</div> 强弱分型的三个判断条件 ⭐</div>
+      <div class="meta-row"><div class="meta-label">背景</div><div class="meta-value"><strong>只操作强分型</strong>（三条件全满足），弱分型跳过。以顶分型为例：</div></div>
+      <div class="cond-grid">
+        <div class="cond-box"><div class="cond-label">CONDITION 01</div><div class="cond-text">中间K无遮挡</div><div class="cond-sub">K2与K1、K3之间几乎无重叠，形成明显孤峰，前方无任何包含遮挡</div></div>
+        <div class="cond-box"><div class="cond-label">CONDITION 02</div><div class="cond-text">K3强势突破K1</div><div class="cond-sub">第三根K线低点，明显跌破第一根K线的低点（顶分型向下突破）</div></div>
+        <div class="cond-box"><div class="cond-label">CONDITION 03</div><div class="cond-text">K3同时突破K2</div><div class="cond-sub">第三根K线低点，同时跌破中间第二根K线的低点（三条全满足 = 强顶分型）</div></div>
+      </div>
+      <div class="rule-tip" style="margin-top:10px;">💡 底分型镜像：① K2无遮挡 ② K3高点突破K1高点 ③ K3同时突破K2高点 → 强底分型，考虑做多</div>
+    </div>
+    <div class="kp-block">
+      <div class="kp-name"><div class="kp-num">3</div> 笔 — 初步概念（本节先修）</div>
+      <div class="meta-row"><div class="meta-label">定义</div><div class="meta-value">由一个<span style="color:var(--green);font-weight:500;">底分型</span>和一个<span style="color:var(--red);font-weight:500;">顶分型</span>相连，构成一段完整的「笔」。<strong>分型是笔的基础。</strong></div></div>
+      <div class="meta-row"><div class="meta-label">方向</div><div class="meta-value">底分型 → 顶分型 = <span style="color:var(--green);">上升笔</span>；顶分型 → 底分型 = <span style="color:var(--red);">下降笔</span></div></div>
+      <div class="meta-row"><div class="meta-label">盘面</div><div class="meta-value">顶分型 → 一波下跌 → 底分型 → 一波上涨，如此循环，形成完整的笔的运动结构。</div></div>
+    </div>
+  </div>
+
+  <!-- 顶底分型图 -->
+  <div class="card">
+    <div class="card-header"><div class="card-icon ci-amber">📊</div><div class="card-title">顶底分型示意图</div><div class="card-tag">DIAGRAM</div></div>
+    <div class="diagram-wrap">
+      <svg width="100%" viewBox="0 0 680 230" xmlns="http://www.w3.org/2000/svg" style="display:block;">
+        <defs>
+          <marker id="aG1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 2L8 5L2 8" fill="none" stroke="#2e7d52" stroke-width="1.5" stroke-linecap="round"/></marker>
+          <marker id="aR1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 2L8 5L2 8" fill="none" stroke="#b94040" stroke-width="1.5" stroke-linecap="round"/></marker>
+        </defs>
+        <rect x="10" y="10" width="310" height="190" rx="10" fill="#fdf0f0" opacity="0.7"/>
+        <rect x="360" y="10" width="310" height="190" rx="10" fill="#edf7f2" opacity="0.7"/>
+        <text x="165" y="30" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="10" fill="#b94040" letter-spacing=".08em">顶分型（看空）</text>
+        <text x="515" y="30" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="10" fill="#2e7d52" letter-spacing=".08em">底分型（看多）</text>
+        <!-- 顶分型 K线 -->
+        <rect x="80" y="72" width="26" height="60" rx="2" fill="#b94040" opacity=".75"/>
+        <rect x="132" y="45" width="26" height="70" rx="2" fill="#b94040" opacity=".9"/>
+        <rect x="184" y="78" width="26" height="64" rx="2" fill="#b94040" opacity=".65"/>
+        <text x="93" y="67" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="8" fill="#b94040">K1</text>
+        <text x="145" y="40" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="8" fill="#b94040" font-weight="500">K2（顶）</text>
+        <text x="197" y="73" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="8" fill="#b94040">K3</text>
+        <line x1="62" y1="45" x2="220" y2="45" stroke="rgba(185,64,64,.25)" stroke-width=".8" stroke-dasharray="4 3"/>
+        <path d="M 212 155 Q 235 172 240 188" fill="none" stroke="#b94040" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#aR1)"/>
+        <text x="248" y="188" font-family="'Noto Sans SC',sans-serif" font-size="11" fill="#b94040">看空</text>
+        <text x="145" y="175" text-anchor="middle" font-family="'Noto Sans SC',sans-serif" font-size="11" fill="#b94040">中间K高点最高</text>
+        <text x="145" y="190" text-anchor="middle" font-family="'Noto Sans SC',sans-serif" font-size="11" fill="#6b6b8a">两侧均低于中间</text>
+        <!-- 底分型 K线 -->
+        <rect x="428" y="58" width="26" height="64" rx="2" fill="#2e7d52" opacity=".75"/>
+        <rect x="480" y="84" width="26" height="80" rx="2" fill="#2e7d52" opacity=".9"/>
+        <rect x="532" y="62" width="26" height="60" rx="2" fill="#2e7d52" opacity=".65"/>
+        <text x="441" y="53" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="8" fill="#2e7d52">K1</text>
+        <text x="493" y="178" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="8" fill="#2e7d52" font-weight="500">K2（底）</text>
+        <text x="545" y="57" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="8" fill="#2e7d52">K3</text>
+        <line x1="410" y1="164" x2="570" y2="164" stroke="rgba(46,125,82,.25)" stroke-width=".8" stroke-dasharray="4 3"/>
+        <path d="M 560 148 Q 582 128 588 110" fill="none" stroke="#2e7d52" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#aG1)"/>
+        <text x="594" y="112" font-family="'Noto Sans SC',sans-serif" font-size="11" fill="#2e7d52">看多</text>
+        <text x="493" y="200" text-anchor="middle" font-family="'Noto Sans SC',sans-serif" font-size="11" fill="#2e7d52">中间K低点最低，两侧均高</text>
+        <!-- 中间说明 -->
+        <rect x="10" y="208" width="660" height="18" rx="4" fill="#fff" stroke="var(--border,#e6e0d4)" stroke-width=".8"/>
+        <text x="340" y="221" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#9ab">前提：先完成K线合并（去包含关系）才能识别分型 ｜ 镜像原则：底分型 = 顶分型翻转</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 三大应用场景 -->
+  <div class="card">
+    <div class="card-header"><div class="card-icon ci-green">🗺</div><div class="card-title">分型三大应用场景</div><div class="card-tag">APPLICATION</div></div>
+    <div class="scene-grid">
+      <div class="scene-box">
+        <div class="scene-num">SCENE 01</div><div class="scene-title">关键位 + 分型</div>
+        <div class="scene-body">压力位出现强顶分型 → 做空<br>支撑位出现强底分型 → 做多<br><br>止损：分型极值点<br>止盈：前期波段低/高点<br><strong>盈亏比目标 ≥ 1:2</strong></div>
+      </div>
+      <div class="scene-box">
+        <div class="scene-num">SCENE 02</div><div class="scene-title">旗形形态 + 分型</div>
+        <div class="scene-body"><strong>熊旗：</strong>旗杆急跌 + 向上收敛楔形（旗帜）+ 旗帽顶部顶分型 → 做空<br><br><strong>牛旗：</strong>旗杆急涨 + 向下收敛楔形 + 旗帽底部底分型 → 做多<br><br>等距目标 1:2.6 ～ 3.4</div>
+      </div>
+      <div class="scene-box">
+        <div class="scene-num">SCENE 03</div><div class="scene-title">123 法则 + 分型</div>
+        <div class="scene-body">① 价格<strong>破趋势线</strong><br>② 回踩<strong>不破前高</strong><br>③ 回踩位出现<strong>强顶分型</strong> → 进空单<br><br>分型是 123 法则进场的最终确认信号</div>
       </div>
     </div>
 
-    <!-- 1. 核心总结 -->
-    <div class="card">
-      <div class="card-header">
-        <div class="card-icon ci-gold">🎯</div>
-        <div class="card-title">本节核心</div>
-        <div class="card-tag">OVERVIEW</div>
-      </div>
-      <div class="summary-text">
-        K线合并是缠论七大零件的<strong>第一步</strong>，其目的是剔除市场中细小波动的噪音，将有包含关系的K线合并为一根没有引线的实体K线，从而形成一张更清晰的盘面供后续分析顶底分型、笔与线段使用。掌握「上升取高，下降取低」口诀，是学习后续所有缠论概念的根基。
-      </div>
+    <!-- 应用场景图 - 修正版：含完整K线，趋势线作辅助 -->
+    <div class="section-label" style="margin-top:16px;">应用场景走势示意</div>
+    <div class="diagram-wrap">
+      <svg width="100%" viewBox="0 0 680 310" xmlns="http://www.w3.org/2000/svg" style="display:block;">
+        <defs>
+          <marker id="aRed" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 2L8 5L2 8" fill="none" stroke="#b94040" stroke-width="1.5" stroke-linecap="round"/></marker>
+          <marker id="aGrn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 2L8 5L2 8" fill="none" stroke="#2e7d52" stroke-width="1.5" stroke-linecap="round"/></marker>
+        </defs>
 
-      <!-- Learning Path -->
-      <div style="margin-top: 18px;">
-        <div class="section-label">学习路径</div>
-        <div class="path-row">
-          <div class="path-node">
-            <div class="path-item done">起源背景</div>
-            <div class="path-arrow">→</div>
-          </div>
-          <div class="path-node">
-            <div class="path-item current">K线合并 ◀</div>
-            <div class="path-arrow">→</div>
-          </div>
-          <div class="path-node">
-            <div class="path-item">顶底分型</div>
-            <div class="path-arrow">→</div>
-          </div>
-          <div class="path-node">
-            <div class="path-item">笔</div>
-            <div class="path-arrow">→</div>
-          </div>
-          <div class="path-node">
-            <div class="path-item">线段</div>
-            <div class="path-arrow">→</div>
-          </div>
-          <div class="path-node">
-            <div class="path-item">中枢</div>
-            <div class="path-arrow">→</div>
-          </div>
-          <div class="path-node">
-            <div class="path-item">背驰</div>
-            <div class="path-arrow">→</div>
-          </div>
-          <div class="path-item">三类买卖点</div>
-        </div>
-      </div>
+        <!-- ─── 背景分区 ─── -->
+        <rect x="8" y="8" width="204" height="270" rx="8" fill="#fdf0f0" opacity=".45"/>
+        <rect x="220" y="8" width="216" height="270" rx="8" fill="#fdf0f0" opacity=".45"/>
+        <rect x="444" y="8" width="228" height="270" rx="8" fill="#fdf0f0" opacity=".45"/>
+        <line x1="218" y1="8" x2="218" y2="278" stroke="var(--border,#e6e0d4)" stroke-width=".8"/>
+        <line x1="442" y1="8" x2="442" y2="278" stroke="var(--border,#e6e0d4)" stroke-width=".8"/>
+
+        <!-- ─── ① 关键位 + 分型 ─── -->
+        <text x="110" y="24" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="10" fill="#b94040">① 关键位 + 分型</text>
+        <!-- 压力位线 -->
+        <line x1="12" y1="62" x2="210" y2="62" stroke="rgba(185,64,64,.4)" stroke-width=".8" stroke-dasharray="4 3"/>
+        <text x="10" y="60" font-family="'Noto Sans SC',sans-serif" font-size="9" fill="#b94040">压</text>
+        <text x="10" y="70" font-family="'Noto Sans SC',sans-serif" font-size="9" fill="#b94040">力</text>
+        <text x="10" y="80" font-family="'Noto Sans SC',sans-serif" font-size="9" fill="#b94040">位</text>
+        <!-- 上涨K线 (绿) -->
+        <rect x="28" y="188" width="12" height="28" rx="1" fill="#2e7d52" opacity=".8"/>
+        <line x1="34" y1="184" x2="34" y2="188" stroke="#2e7d52" stroke-width="1"/><line x1="34" y1="216" x2="34" y2="220" stroke="#2e7d52" stroke-width="1"/>
+        <rect x="44" y="168" width="12" height="30" rx="1" fill="#2e7d52" opacity=".8"/>
+        <line x1="50" y1="163" x2="50" y2="168" stroke="#2e7d52" stroke-width="1"/><line x1="50" y1="198" x2="50" y2="202" stroke="#2e7d52" stroke-width="1"/>
+        <rect x="60" y="146" width="12" height="28" rx="1" fill="#2e7d52" opacity=".8"/>
+        <line x1="66" y1="141" x2="66" y2="146" stroke="#2e7d52" stroke-width="1"/><line x1="66" y1="174" x2="66" y2="179" stroke="#2e7d52" stroke-width="1"/>
+        <rect x="76" y="120" width="12" height="32" rx="1" fill="#2e7d52" opacity=".8"/>
+        <line x1="82" y1="114" x2="82" y2="120" stroke="#2e7d52" stroke-width="1"/><line x1="82" y1="152" x2="82" y2="158" stroke="#2e7d52" stroke-width="1"/>
+        <rect x="92" y="96" width="12" height="30" rx="1" fill="#2e7d52" opacity=".8"/>
+        <line x1="98" y1="90" x2="98" y2="96" stroke="#2e7d52" stroke-width="1"/><line x1="98" y1="126" x2="98" y2="131" stroke="#2e7d52" stroke-width="1"/>
+        <!-- 顶分型 (红×3) -->
+        <rect x="108" y="54" width="12" height="40" rx="1" fill="#b94040" opacity=".8"/>
+        <line x1="114" y1="48" x2="114" y2="54" stroke="#b94040" stroke-width="1"/><line x1="114" y1="94" x2="114" y2="99" stroke="#b94040" stroke-width="1"/>
+        <rect x="124" y="44" width="12" height="30" rx="1" fill="#b94040" opacity=".9"/>
+        <line x1="130" y1="38" x2="130" y2="44" stroke="#b94040" stroke-width="1"/><line x1="130" y1="74" x2="130" y2="79" stroke="#b94040" stroke-width="1"/>
+        <rect x="140" y="58" width="12" height="42" rx="1" fill="#b94040" opacity=".7"/>
+        <line x1="146" y1="52" x2="146" y2="58" stroke="#b94040" stroke-width="1"/><line x1="146" y1="100" x2="146" y2="106" stroke="#b94040" stroke-width="1"/>
+        <text x="130" y="118" text-anchor="middle" font-family="'Noto Sans SC',sans-serif" font-size="9" fill="#b94040">强顶分型</text>
+        <line x1="152" y1="72" x2="174" y2="72" stroke="#b94040" stroke-width="1" stroke-dasharray="3 2" marker-end="url(#aRed)"/>
+        <text x="178" y="76" font-family="'Noto Sans SC',sans-serif" font-size="9" fill="#b94040">做空</text>
+        <!-- 下跌K线 (红) -->
+        <rect x="156" y="100" width="12" height="36" rx="1" fill="#b94040" opacity=".75"/>
+        <line x1="162" y1="95" x2="162" y2="100" stroke="#b94040" stroke-width="1"/><line x1="162" y1="136" x2="162" y2="142" stroke="#b94040" stroke-width="1"/>
+        <rect x="172" y="138" width="12" height="38" rx="1" fill="#b94040" opacity=".75"/>
+        <line x1="178" y1="132" x2="178" y2="138" stroke="#b94040" stroke-width="1"/><line x1="178" y1="176" x2="178" y2="182" stroke="#b94040" stroke-width="1"/>
+        <rect x="188" y="178" width="12" height="36" rx="1" fill="#b94040" opacity=".75"/>
+        <line x1="194" y1="172" x2="194" y2="178" stroke="#b94040" stroke-width="1"/><line x1="194" y1="214" x2="194" y2="219" stroke="#b94040" stroke-width="1"/>
+        <!-- 文字 -->
+        <text x="22" y="258" font-family="'Noto Sans SC',sans-serif" font-size="9" fill="#6b6b8a">止损：顶分型最高点</text>
+        <text x="22" y="270" font-family="'Noto Sans SC',sans-serif" font-size="9" fill="#6b6b8a">止盈：前低，盈亏≥1:2</text>
+
+        <!-- ─── ② 旗形（熊旗）+ 分型 ─── -->
+        <text x="328" y="24" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="10" fill="#b94040">② 旗形（熊旗）+ 分型</text>
+        <!-- 旗杆：急跌K线 -->
+        <text x="226" y="42" font-family="'Noto Sans SC',sans-serif" font-size="9" fill="#6b6b8a">旗顶</text>
+        <rect x="234" y="44" width="12" height="48" rx="1" fill="#b94040" opacity=".9"/>
+        <line x1="240" y1="38" x2="240" y2="44" stroke="#b94040" stroke-width="1"/><line x1="240" y1="92" x2="240" y2="98" stroke="#b94040" stroke-width="1"/>
+        <rect x="250" y="92" width="12" height="52" rx="1" fill="#b94040" opacity=".9"/>
+        <line x1="256" y1="86" x2="256" y2="92" stroke="#b94040" stroke-width="1"/><line x1="256" y1="144" x2="256" y2="150" stroke="#b94040" stroke-width="1"/>
+        <rect x="266" y="146" width="12" height="44" rx="1" fill="#b94040" opacity=".9"/>
+        <line x1="272" y1="140" x2="272" y2="146" stroke="#b94040" stroke-width="1"/><line x1="272" y1="190" x2="272" y2="196" stroke="#b94040" stroke-width="1"/>
+        <text x="226" y="200" font-family="'Noto Sans SC',sans-serif" font-size="9" fill="#6b6b8a">旗底</text>
+        <!-- 旗帜：向上收敛楔形 + K线 -->
+        <line x1="280" y1="192" x2="358" y2="132" stroke="rgba(74,122,181,.55)" stroke-width="1.2" stroke-dasharray="1 0"/>
+        <line x1="280" y1="214" x2="358" y2="158" stroke="rgba(74,122,181,.55)" stroke-width="1.2" stroke-dasharray="1 0"/>
+        <rect x="282" y="188" width="10" height="22" rx="1" fill="#2e7d52" opacity=".8"/>
+        <line x1="287" y1="183" x2="287" y2="188" stroke="#2e7d52" stroke-width="1"/><line x1="287" y1="210" x2="287" y2="215" stroke="#2e7d52" stroke-width="1"/>
+        <rect x="296" y="176" width="10" height="24" rx="1" fill="#2e7d52" opacity=".8"/>
+        <line x1="301" y1="171" x2="301" y2="176" stroke="#2e7d52" stroke-width="1"/><line x1="301" y1="200" x2="301" y2="205" stroke="#2e7d52" stroke-width="1"/>
+        <rect x="310" y="165" width="10" height="22" rx="1" fill="#2e7d52" opacity=".8"/>
+        <line x1="315" y1="160" x2="315" y2="165" stroke="#2e7d52" stroke-width="1"/><line x1="315" y1="187" x2="315" y2="192" stroke="#2e7d52" stroke-width="1"/>
+        <!-- 旗帽顶分型 -->
+        <rect x="324" y="146" width="10" height="26" rx="1" fill="#b94040" opacity=".8"/>
+        <line x1="329" y1="140" x2="329" y2="146" stroke="#b94040" stroke-width="1"/><line x1="329" y1="172" x2="329" y2="177" stroke="#b94040" stroke-width="1"/>
+        <rect x="338" y="136" width="10" height="22" rx="1" fill="#b94040" opacity=".9"/>
+        <line x1="343" y1="130" x2="343" y2="136" stroke="#b94040" stroke-width="1"/><line x1="343" y1="158" x2="343" y2="163" stroke="#b94040" stroke-width="1"/>
+        <rect x="352" y="148" width="10" height="26" rx="1" fill="#b94040" opacity=".7"/>
+        <line x1="357" y1="142" x2="357" y2="148" stroke="#b94040" stroke-width="1"/><line x1="357" y1="174" x2="357" y2="179" stroke="#b94040" stroke-width="1"/>
+        <text x="343" y="128" text-anchor="middle" font-family="'Noto Sans SC',sans-serif" font-size="9" fill="#b94040">顶分型</text>
+        <line x1="364" y1="148" x2="386" y2="148" stroke="#b94040" stroke-width="1" stroke-dasharray="3 2" marker-end="url(#aRed)"/>
+        <text x="390" y="152" font-family="'Noto Sans SC',sans-serif" font-size="9" fill="#b94040">做空</text>
+        <!-- 继续下跌K线 -->
+        <rect x="370" y="178" width="10" height="36" rx="1" fill="#b94040" opacity=".85"/>
+        <line x1="375" y1="172" x2="375" y2="178" stroke="#b94040" stroke-width="1"/><line x1="375" y1="214" x2="375" y2="220" stroke="#b94040" stroke-width="1"/>
+        <rect x="384" y="215" width="10" height="38" rx="1" fill="#b94040" opacity=".85"/>
+        <line x1="389" y1="209" x2="389" y2="215" stroke="#b94040" stroke-width="1"/><line x1="389" y1="253" x2="389" y2="258" stroke="#b94040" stroke-width="1"/>
+        <!-- 旗帜说明 -->
+        <text x="314" y="244" text-anchor="middle" font-family="'Noto Sans SC',sans-serif" font-size="9" fill="#4a7ab5">旗帜（向上收敛楔形）</text>
+        <text x="314" y="270" text-anchor="middle" font-family="'Noto Sans SC',sans-serif" font-size="9" fill="#6b6b8a">等距目标 1:2.6 ～ 3.4</text>
+
+        <!-- ─── ③ 123法则 + 正确K线（①在谷底·②在回踩峰顶） ─── -->
+        <text x="558" y="24" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="10" fill="#b94040">③ 123 法则 + 分型</text>
+
+        <!-- 趋势支撑线（从左下到右上，缓坡虚线） -->
+        <line x1="450" y1="284" x2="658" y2="168" stroke="rgba(74,122,181,.5)" stroke-width="1.3" stroke-dasharray="5 4"/>
+        <text x="645" y="162" font-family="'Noto Sans SC',sans-serif" font-size="9" fill="#4a7ab5">趋势线</text>
+
+        <!-- 前高参考线（c5最高点，用于对比②不破前高） -->
+        <line x1="452" y1="172" x2="636" y2="172" stroke="rgba(185,64,64,.15)" stroke-width=".8" stroke-dasharray="3 4"/>
+
+        <!-- ══ 上涨K线 c1–c5（绿，阶梯上涨，均在趋势线上方） ══ -->
+        <!-- c1 -->
+        <line x1="458" y1="249" x2="458" y2="255" stroke="#2e7d52" stroke-width="1.2"/>
+        <rect x="452" y="255" width="12" height="22" rx="1" fill="#2e7d52" opacity=".85"/>
+        <line x1="458" y1="277" x2="458" y2="282" stroke="#2e7d52" stroke-width="1.2"/>
+        <!-- c2 -->
+        <line x1="472" y1="231" x2="472" y2="237" stroke="#2e7d52" stroke-width="1.2"/>
+        <rect x="466" y="237" width="12" height="21" rx="1" fill="#2e7d52" opacity=".85"/>
+        <line x1="472" y1="258" x2="472" y2="263" stroke="#2e7d52" stroke-width="1.2"/>
+        <!-- c3 -->
+        <line x1="486" y1="211" x2="486" y2="217" stroke="#2e7d52" stroke-width="1.2"/>
+        <rect x="480" y="217" width="12" height="22" rx="1" fill="#2e7d52" opacity=".85"/>
+        <line x1="486" y1="239" x2="486" y2="245" stroke="#2e7d52" stroke-width="1.2"/>
+        <!-- c4 -->
+        <line x1="500" y1="190" x2="500" y2="196" stroke="#2e7d52" stroke-width="1.2"/>
+        <rect x="494" y="196" width="12" height="22" rx="1" fill="#2e7d52" opacity=".85"/>
+        <line x1="500" y1="218" x2="500" y2="224" stroke="#2e7d52" stroke-width="1.2"/>
+        <!-- c5（前高，wick顶y=172） -->
+        <line x1="514" y1="172" x2="514" y2="178" stroke="#2e7d52" stroke-width="1.2"/>
+        <rect x="508" y="178" width="12" height="20" rx="1" fill="#2e7d52" opacity=".85"/>
+        <line x1="514" y1="198" x2="514" y2="204" stroke="#2e7d52" stroke-width="1.2"/>
+
+        <!-- ══ 跌破趋势线：c6红K向下穿过趋势线 ══ -->
+        <!-- c6 -->
+        <line x1="528" y1="178" x2="528" y2="185" stroke="#b94040" stroke-width="1.2"/>
+        <rect x="522" y="185" width="12" height="52" rx="1" fill="#b94040" opacity=".85"/>
+        <line x1="528" y1="237" x2="528" y2="244" stroke="#b94040" stroke-width="1.2"/>
+        <!-- 趋势线在c6处约y=239，c6收盘y=237，刚好跌破 -->
+
+        <!-- ══ 继续下跌 c7（更低） ══ -->
+        <!-- c7 -->
+        <line x1="542" y1="240" x2="542" y2="247" stroke="#b94040" stroke-width="1.2"/>
+        <rect x="536" y="247" width="12" height="28" rx="1" fill="#b94040" opacity=".85"/>
+        <line x1="542" y1="275" x2="542" y2="282" stroke="#b94040" stroke-width="1.2"/>
+
+        <!-- ① 圆圈在谷底（c7最低点，在趋势线下方） -->
+        <circle cx="542" cy="283" r="6.5" fill="none" stroke="#d4a843" stroke-width="1.6"/>
+        <text x="520" y="298" font-family="'Noto Sans SC',sans-serif" font-size="9" fill="#d4a843">①破线</text>
+
+        <!-- ══ 反弹K线 c8–c11（绿，从谷底涨回趋势线下方） ══ -->
+        <!-- c8 -->
+        <line x1="556" y1="268" x2="556" y2="274" stroke="#2e7d52" stroke-width="1.2"/>
+        <rect x="550" y="274" width="12" height="12" rx="1" fill="#2e7d52" opacity=".75"/>
+        <line x1="556" y1="286" x2="556" y2="290" stroke="#2e7d52" stroke-width="1.2"/>
+        <!-- c9 -->
+        <line x1="570" y1="248" x2="570" y2="254" stroke="#2e7d52" stroke-width="1.2"/>
+        <rect x="564" y="254" width="12" height="18" rx="1" fill="#2e7d52" opacity=".78"/>
+        <line x1="570" y1="272" x2="570" y2="278" stroke="#2e7d52" stroke-width="1.2"/>
+        <!-- c10 -->
+        <line x1="584" y1="224" x2="584" y2="230" stroke="#2e7d52" stroke-width="1.2"/>
+        <rect x="578" y="230" width="12" height="20" rx="1" fill="#2e7d52" opacity=".80"/>
+        <line x1="584" y1="250" x2="584" y2="256" stroke="#2e7d52" stroke-width="1.2"/>
+        <!-- c11 -->
+        <line x1="598" y1="202" x2="598" y2="208" stroke="#2e7d52" stroke-width="1.2"/>
+        <rect x="592" y="208" width="12" height="20" rx="1" fill="#2e7d52" opacity=".80"/>
+        <line x1="598" y1="228" x2="598" y2="234" stroke="#2e7d52" stroke-width="1.2"/>
+
+        <!-- ══ 强顶分型 K1/K2/K3（峰顶触碰趋势线，低于前高y=172） ══ -->
+        <!-- K1（左，中等高） -->
+        <line x1="612" y1="198" x2="612" y2="204" stroke="#b94040" stroke-width="1.2"/>
+        <rect x="606" y="204" width="12" height="22" rx="1" fill="#b94040" opacity=".78"/>
+        <line x1="612" y1="226" x2="612" y2="232" stroke="#b94040" stroke-width="1.2"/>
+        <!-- K2（中，最高，wick顶y=190，趋势线在此约y=191 → 刚好触碰） -->
+        <line x1="626" y1="190" x2="626" y2="197" stroke="#b94040" stroke-width="1.2"/>
+        <rect x="620" y="197" width="12" height="24" rx="1" fill="#b94040" opacity=".92"/>
+        <line x1="626" y1="221" x2="626" y2="228" stroke="#b94040" stroke-width="1.2"/>
+        <!-- K3（右，稍短） -->
+        <line x1="640" y1="202" x2="640" y2="208" stroke="#b94040" stroke-width="1.2"/>
+        <rect x="634" y="208" width="12" height="20" rx="1" fill="#b94040" opacity=".72"/>
+        <line x1="640" y1="228" x2="640" y2="235" stroke="#b94040" stroke-width="1.2"/>
+
+        <!-- ② 圆圈在K2顶部（触及趋势线处，低于前高） -->
+        <circle cx="626" cy="188" r="6.5" fill="none" stroke="#d4a843" stroke-width="1.6"/>
+        <text x="620" y="178" text-anchor="middle" font-family="'Noto Sans SC',sans-serif" font-size="9" fill="#d4a843">②回踩</text>
+        <text x="620" y="168" text-anchor="middle" font-family="'Noto Sans SC',sans-serif" font-size="9" fill="#d4a843">不破前高</text>
+        <!-- 强顶分型标注 -->
+        <text x="654" y="204" font-family="'Noto Sans SC',sans-serif" font-size="9" fill="#b94040">强顶</text>
+        <text x="654" y="215" font-family="'Noto Sans SC',sans-serif" font-size="9" fill="#b94040">分型</text>
+
+        <!-- ══ 做空大红K + 向下箭头 ══ -->
+        <line x1="659" y1="216" x2="659" y2="223" stroke="#b94040" stroke-width="1.2"/>
+        <rect x="653" y="223" width="12" height="42" rx="1" fill="#b94040" opacity=".92"/>
+        <line x1="659" y1="265" x2="659" y2="280" stroke="#b94040" stroke-width="1.8" marker-end="url(#aRed)"/>
+        <text x="660" y="295" font-family="'Noto Sans SC',sans-serif" font-size="9" fill="#b94040">做空</text>
+      </svg>
     </div>
 
-    <!-- 2. 知识点详解 -->
-    <div class="card">
-      <div class="card-header">
-        <div class="card-icon ci-navy">📖</div>
-        <div class="card-title">知识点详解</div>
-        <div class="card-tag">DETAILS</div>
+    <!-- 左右侧进场 -->
+    <div class="section-label" style="margin-top:16px;">左侧 vs 右侧进场</div>
+    <div class="entry-grid">
+      <div class="entry-box">
+        <div class="entry-type">RIGHT SIDE · 右侧进场</div><div class="entry-title">市价直接进场</div>
+        <div class="entry-row"><span class="dot-plus">+</span>分型成立后直接入场，保证不踏空</div>
+        <div class="entry-row"><span class="dot-minus">−</span>成本较高，盈亏比约 1:3</div>
       </div>
-
-      <!-- KP 1 -->
-      <div class="kp-block">
-        <div class="kp-name"><div class="kp-num">1</div> 缠论K线的特殊性</div>
-        <div class="meta-row">
-          <div class="meta-label">定义</div>
-          <div class="meta-value">缠论K线<strong>没有引线（上下影线）</strong>，只有实体部分。每根K线只有一个高点和一个低点。</div>
-        </div>
-        <div class="meta-row">
-          <div class="meta-label">原理</div>
-          <div class="meta-value">禅师认为，价格只要到过某个位置（哪怕只是影线触及），就视为实实在在到过，因此将影线并入实体。</div>
-        </div>
-        <div class="meta-row">
-          <div class="meta-label">实操意义</div>
-          <div class="meta-value">形成"只有实体"的标准K线图，消除影线带来的视觉干扰。</div>
-        </div>
-      </div>
-
-      <!-- KP 2 -->
-      <div class="kp-block">
-        <div class="kp-name"><div class="kp-num">2</div> 为什么要合并K线？</div>
-        <div class="meta-row">
-          <div class="meta-label">问题</div>
-          <div class="meta-value">盘面上存在大量细小、无方向感的波动，对看盘人形成干扰，称为<strong>噪音（杂讯）</strong>。</div>
-        </div>
-        <div class="meta-row">
-          <div class="meta-label">解法</div>
-          <div class="meta-value">将有包含关系（内包/外包）的K线合并成一根，剔除这些无效波动，得到更干净的K线图。</div>
-        </div>
-        <div class="meta-row">
-          <div class="meta-label">注意</div>
-          <div class="meta-value">实操时<strong>无需对所有历史K线逐一合并</strong>，等全部合并完行情已结束；重点在于理解形成逻辑与形态识别。</div>
-        </div>
-      </div>
-
-      <!-- KP 3 -->
-      <div class="kp-block">
-        <div class="kp-name"><div class="kp-num">3</div> 合并触发条件</div>
-        <div class="meta-row">
-          <div class="meta-label">触发</div>
-          <div class="meta-value">两根K线之间出现<strong>内包</strong>或<strong>外包</strong>关系，必须合并。</div>
-        </div>
-        <div class="meta-row">
-          <div class="meta-label">循环</div>
-          <div class="meta-value">合并后生成的新K线若与相邻K线再次发生包含关系，需<strong>继续合并</strong>，直到盘面上所有K线不再有包含关系为止。</div>
-        </div>
-      </div>
-
-      <!-- KP 4 合并口诀 -->
-      <div class="kp-block">
-        <div class="kp-name"><div class="kp-num">4</div> 合并口诀 ⭐</div>
-
-        <div style="margin-bottom: 10px;">
-          <div class="meta-row">
-            <div class="meta-label">判断趋势</div>
-            <div class="meta-value">看<strong>发生包含关系之前那根K线</strong>的运动方向（涨上来 = 上升；跌下来 = 下降）</div>
-          </div>
-        </div>
-
-        <div class="rule-grid">
-          <div class="rule-box up">
-            <div class="rule-title up">📈 上升趋势</div>
-            <div class="rule-item">
-              <span class="rule-key up">高点 →</span>
-              取两根K线中 <strong>最高价</strong>
-            </div>
-            <div class="rule-item">
-              <span class="rule-key up">低点 →</span>
-              取两根K线中 <strong>较高的低价</strong>
-            </div>
-          </div>
-          <div class="rule-box down">
-            <div class="rule-title down">📉 下降趋势</div>
-            <div class="rule-item">
-              <span class="rule-key down">高点 →</span>
-              取两根K线中 <strong>较低的高价</strong>
-            </div>
-            <div class="rule-item">
-              <span class="rule-key down">低点 →</span>
-              取两根K线中 <strong>最低价</strong>
-            </div>
-          </div>
-        </div>
-
-        <div class="rule-tip">
-          💡 速记：上升「取高高、取低高」；下降「取高低、取低低」
-        </div>
+      <div class="entry-box">
+        <div class="entry-type">LEFT SIDE · 左侧进场</div><div class="entry-title">在回调 50% 处挂限价单</div>
+        <div class="entry-row"><span class="dot-plus">+</span>成本更低，盈亏比可达 1:6</div>
+        <div class="entry-row"><span class="dot-minus">−</span>行情过强不回调则踏空</div>
       </div>
     </div>
-
-    <!-- 3. K线合并图解 -->
-    <div class="card">
-      <div class="card-header">
-        <div class="card-icon ci-amber">📊</div>
-        <div class="card-title">K线合并示意图</div>
-        <div class="card-tag">DIAGRAM</div>
-      </div>
-      <div class="diagram-wrap">
-        <svg width="100%" viewBox="0 0 680 360" xmlns="http://www.w3.org/2000/svg" style="display:block;">
-          <defs>
-            <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-              <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </marker>
-          </defs>
-
-          <!-- bg panels -->
-          <rect x="10" y="10" width="310" height="280" rx="10" fill="#edf7f2" opacity="0.6"/>
-          <rect x="360" y="10" width="310" height="280" rx="10" fill="#fdf0f0" opacity="0.6"/>
-
-          <!-- Labels -->
-          <text x="165" y="34" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="11" fill="#2e7d52" letter-spacing="0.08em">上升趋势合并</text>
-          <text x="515" y="34" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="11" fill="#b94040" letter-spacing="0.08em">下降趋势合并</text>
-
-          <!-- ── 上升趋势 ── -->
-          <!-- 前置上升K线（说明趋势） -->
-          <rect x="38" y="175" width="22" height="60" rx="2" fill="#2e7d52" opacity="0.3"/>
-          <rect x="68" y="145" width="22" height="70" rx="2" fill="#2e7d52" opacity="0.3"/>
-          <text x="66" y="238" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#9ab" opacity="0.7">趋势</text>
-
-          <!-- 包含关系框 -->
-          <rect x="102" y="110" width="72" height="105" rx="5" fill="none" stroke="#d4a843" stroke-width="1.2" stroke-dasharray="5 3"/>
-          <text x="138" y="95" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#d4a843">内包关系</text>
-
-          <!-- K线A（高） -->
-          <rect x="108" y="115" width="26" height="96" rx="2" fill="#2e7d52" opacity="0.75"/>
-          <text x="121" y="110" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#2e7d52">高A=200</text>
-          <text x="121" y="224" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#2e7d52">低A=110</text>
-
-          <!-- K线B（被包含） -->
-          <rect x="142" y="135" width="26" height="62" rx="2" fill="#2e7d52" opacity="0.4"/>
-          <text x="155" y="130" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#2e7d52">高B=180</text>
-          <text x="155" y="210" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#2e7d52">低B=135</text>
-
-          <!-- arrow -->
-          <line x1="190" y1="163" x2="214" y2="163" stroke="#888" stroke-width="1.2" marker-end="url(#arr)"/>
-          <text x="202" y="157" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#888">合并</text>
-
-          <!-- 合并后K线（上升）：取高A=200, 低B=135 -->
-          <rect x="220" y="115" width="36" height="82" rx="3" fill="#2e7d52" opacity="0.9"/>
-          <text x="238" y="110" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#2e7d52" font-weight="500">↑ 200（最高）</text>
-          <text x="238" y="213" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#2e7d52" font-weight="500">↑ 135（较高低）</text>
-
-          <!-- 上升规则文字 -->
-          <rect x="28" y="302" width="280" height="36" rx="6" fill="#fff" stroke="#d4e8dc" stroke-width="1"/>
-          <text x="168" y="316" text-anchor="middle" font-family="'Noto Sans SC',sans-serif" font-size="11" fill="#2e7d52">高点取最高 · 低点取较高的低价</text>
-          <text x="168" y="330" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#9ab">High = max(高A,高B)  Low = max(低A,低B)</text>
-
-          <!-- ── 下降趋势 ── -->
-          <!-- 前置下降K线 -->
-          <rect x="388" y="100" width="22" height="75" rx="2" fill="#b94040" opacity="0.3"/>
-          <rect x="418" y="120" width="22" height="95" rx="2" fill="#b94040" opacity="0.3"/>
-          <text x="416" y="228" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#9ab" opacity="0.7">趋势</text>
-
-          <!-- 包含关系框 -->
-          <rect x="452" y="95" width="72" height="110" rx="5" fill="none" stroke="#d4a843" stroke-width="1.2" stroke-dasharray="5 3"/>
-          <text x="488" y="80" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#d4a843">内包关系</text>
-
-          <!-- K线C（较高，先出现） -->
-          <rect x="458" y="100" width="26" height="100" rx="2" fill="#b94040" opacity="0.75"/>
-          <text x="471" y="95" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#b94040">高C=190</text>
-          <text x="471" y="215" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#b94040">低C=90</text>
-
-          <!-- K线D（被包含） -->
-          <rect x="492" y="115" width="26" height="70" rx="2" fill="#b94040" opacity="0.4"/>
-          <text x="505" y="110" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#b94040">高D=170</text>
-          <text x="505" y="198" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#b94040">低D=105</text>
-
-          <!-- arrow -->
-          <line x1="535" y1="158" x2="558" y2="158" stroke="#888" stroke-width="1.2" marker-end="url(#arr)"/>
-          <text x="547" y="152" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#888">合并</text>
-
-          <!-- 合并后K线（下降）：取高D=170, 低C=90 -->
-          <rect x="564" y="113" width="36" height="87" rx="3" fill="#b94040" opacity="0.9"/>
-          <text x="582" y="108" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#b94040" font-weight="500">↓ 170（较低高）</text>
-          <text x="582" y="215" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#b94040" font-weight="500">↓ 90（最低）</text>
-
-          <!-- 下降规则文字 -->
-          <rect x="378" y="302" width="280" height="36" rx="6" fill="#fff" stroke="#e8d4d4" stroke-width="1"/>
-          <text x="518" y="316" text-anchor="middle" font-family="'Noto Sans SC',sans-serif" font-size="11" fill="#b94040">高点取较低 · 低点取最低价</text>
-          <text x="518" y="330" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#9ab">High = min(高C,高D)  Low = min(低C,低D)</text>
-        </svg>
-      </div>
+    <div style="background:var(--gold-pale);border-radius:8px;padding:14px 16px;border:1px solid rgba(212,168,67,.25);margin-top:10px;">
+      <div style="font-family:'Noto Serif SC',serif;font-size:13px;font-weight:600;color:var(--amber);margin-bottom:6px;">★ 推荐：半仓策略</div>
+      <div style="font-size:12.5px;color:var(--ink-mid);line-height:1.8;">总仓位 400u → <strong>200u 市价直接进</strong>（保证不踏空）+ <strong>200u 挂在 50% 位置</strong>（等更低成本）<br>若不回调：至少 200u 已盈利；若回调：两笔全进，综合成本优于市价。</div>
     </div>
+  </div>
 
-    <!-- 4. 关键规则速记 -->
-    <div class="card">
-      <div class="card-header">
-        <div class="card-icon ci-gold">🔑</div>
-        <div class="card-title">关键规则速记</div>
-        <div class="card-tag">QUICK REF</div>
-      </div>
-      <ul class="rules-list">
-        <li><div class="rule-bullet">01</div>只要两根K线存在内包或外包关系，就必须合并，不允许跳过。</li>
-        <li><div class="rule-bullet">02</div>合并后的缠论K线<strong>无引线</strong>，只有实体——价格到过的位置即为实体边界。</li>
-        <li><div class="rule-bullet">03</div>趋势判断：看触发包含关系<strong>之前</strong>那根K线的运动方向（涨→上升，跌→下降）。</li>
-        <li><div class="rule-bullet">04</div>上升趋势：高点取最高，低点取两者中<strong>较高</strong>的低价（防止合并后下移）。</li>
-        <li><div class="rule-bullet">05</div>下降趋势：低点取最低，高点取两者中<strong>较低</strong>的高价（防止合并后上移）。</li>
-        <li><div class="rule-bullet">06</div>合并后若新K线与后续K线<strong>再次</strong>产生包含关系，需继续合并，直到完全消除为止。</li>
-        <li><div class="rule-bullet">07</div>实操时无需1:1逐一合并所有历史K线，重点是理解底层逻辑、识别形态，防止行情结束才动手。</li>
-        <li><div class="rule-bullet">08</div>缠论可与量价分析<strong>叠加使用</strong>，量价为辅助共振条件，两者无排他性。</li>
-      </ul>
+  <div class="card">
+    <div class="card-header"><div class="card-icon ci-gold">🔑</div><div class="card-title">关键规则速记</div><div class="card-tag">QUICK REF</div></div>
+    <ul class="rules-list">
+      <li><div class="rule-bullet">01</div>合并 → 去包含 → 识别分型 → 判强弱 → 择机进场，步骤不可跳过。</li>
+      <li><div class="rule-bullet">02</div>三条件全满足 = 强分型，<strong>优先操作</strong>；弱分型跳过，等待更好机会。</li>
+      <li><div class="rule-bullet">03</div>顶分型 = 看空信号；底分型 = 看多信号；缠论K线不区分阴阳，只看高低点。</li>
+      <li><div class="rule-bullet">04</div>镜像原则：所有顶的规则，翻转即为底的规则，完全对称。</li>
+      <li><div class="rule-bullet">05</div>止损放在分型极值点（顶分型最高 / 底分型最低），盈亏比至少 1:2。</li>
+      <li><div class="rule-bullet">06</div>熊旗 = 旗杆急跌 + 向上收敛楔形整理 + 旗帽顶部顶分型做空。</li>
+      <li><div class="rule-bullet">07</div>牛旗 = 旗杆急涨 + 向下收敛楔形整理 + 旗帽底部底分型做多。</li>
+      <li><div class="rule-bullet">08</div>123法则：破趋势线（①）→ 回踩不破前高/低（②）→ 强分型确认（③）→ 进场。</li>
+      <li><div class="rule-bullet">09</div>仓位管理：半仓策略 = 右侧市价 50% + 左侧限价 50%，兼顾不踏空与低成本。</li>
+      <li><div class="rule-bullet">10</div>分型是笔的基础，学完本节后下节详解笔的规则与画法。</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-icon ci-green">❓</div><div class="card-title">课堂答疑摘要</div><div class="card-tag">Q &amp; A</div></div>
+    <div class="qa-item"><div class="qa-q"><span class="qa-badge q">Q</span>出现强顶分型，为什么要做半仓策略而不是全仓挂在 50% 等回调？</div><div class="qa-a"><span class="qa-badge a">A</span>如果行情过于强势，价格可能不回调到 50% 就直接延续，导致全仓踏空。半仓策略可以兼顾：一半保证进场，一半等待更优成本。</div></div>
+    <div class="qa-item"><div class="qa-q"><span class="qa-badge q">Q</span>波浪理论（艾略特波浪）准确吗？能和缠论结合使用吗？</div><div class="qa-a"><span class="qa-badge a">A</span>波浪理论主观性较强，每人数浪方式不同，缺乏明确客观标准。课程主要采用缠论方法论，其规则更客观可操作。两者可结合使用，但不建议强依赖波浪计数。</div></div>
+  </div>
+
+  <div class="footer-note">ChanlunNotes · 缠论入门系列 · Lesson 02 of 08 · 内容由AI整理，仅供学习复习参考</div>
+</div>
+
+</main>
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar">
+  <div class="scard">
+    <div class="scard-title"><div class="scard-title-dot"></div>缠论数字</div>
+    <div class="stat-grid">
+      <div class="stat-box"><div class="stat-n">1134</div><div class="stat-l">博客总文章</div></div>
+      <div class="stat-box"><div class="stat-n">108</div><div class="stat-l">炒股票系列</div></div>
+      <div class="stat-box"><div class="stat-n">7</div><div class="stat-l">核心零件数</div></div>
+      <div class="stat-box"><div class="stat-n" style="font-size:20px">06–08</div><div class="stat-l">发表年份</div></div>
     </div>
+  </div>
 
-    <!-- 5. 课堂答疑 -->
-    <div class="card">
-      <div class="card-header">
-        <div class="card-icon ci-green">❓</div>
-        <div class="card-title">课堂答疑摘要</div>
-        <div class="card-tag">Q &amp; A</div>
-      </div>
-
-      <div class="qa-item">
-        <div class="qa-q">
-          <span class="qa-badge q">Q</span>
-          合并K线是否会忽略真实价格信息？
-        </div>
-        <div class="qa-a">
-          <span class="qa-badge a">A</span>
-          合并并不丢失信息，而是以新视角呈现。只要存在包含关系就必须合并，这是缠论的基本规则。合并后信息仍完整，只是噪音被剔除了。
-        </div>
-      </div>
-
-      <div class="qa-item">
-        <div class="qa-q">
-          <span class="qa-badge q">Q</span>
-          缠论能否与量价分析一起使用？
-        </div>
-        <div class="qa-a">
-          <span class="qa-badge a">A</span>
-          可以。缠论对量价没有排他性，量价分析可以作为「叠 buff」的辅助共振条件，所有理论都可以组合使用。如需深入学量价可参考沃福老师的课程。
-        </div>
-      </div>
-
-      <div class="qa-item">
-        <div class="qa-q">
-          <span class="qa-badge q">Q</span>
-          旗杆末端如何确定？
-        </div>
-        <div class="qa-a">
-          <span class="qa-badge a">A</span>
-          只要该位置开始回调，就可以确定为末端。回调开始后，结合趋势K线和三种K线反转形态来判断具体位置。
-        </div>
-      </div>
-
-      <div class="qa-item">
-        <div class="qa-q">
-          <span class="qa-badge q">Q</span>
-          有没有专门自动合并缠论K线的工具或指标？
-        </div>
-        <div class="qa-a">
-          <span class="qa-badge a">A</span>
-          有。常见看盘软件中可以搜索缠论相关指标（笔、线段、走势类型、中枢等），但建议先理解底层逻辑再使用，否则工具给结果你也不知道为什么，遇到特殊情况就会懵。
-        </div>
-      </div>
+  <div class="scard">
+    <div class="scard-title"><div class="scard-title-dot"></div>七大零件进度</div>
+    <div class="prog-item">
+      <div class="prog-header"><div class="prog-name">K线合并</div><div class="prog-pct" id="p0-pct">✓ 本节</div></div>
+      <div class="prog-track"><div class="prog-fill done" id="p0" style="width:100%"></div></div>
     </div>
-
-
-
-    <div class="footer-note">ChanlunNotes · 缠论入门系列 · Lesson 01 of 08 · 内容由AI整理，仅供学习复习参考</div>
-  </main>
-
-  <!-- ── RIGHT SIDEBAR ── -->
-  <aside class="sidebar">
-
-    <!-- Stats -->
-    <div class="scard">
-      <div class="scard-title"><div class="scard-title-dot"></div>缠论数字</div>
-      <div class="stat-grid">
-        <div class="stat-box">
-          <div class="stat-n">1134</div>
-          <div class="stat-l">博客总文章</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-n">108</div>
-          <div class="stat-l">炒股票系列</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-n">7</div>
-          <div class="stat-l">核心零件数</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-n" style="font-size:20px">06–08</div>
-          <div class="stat-l">发表年份</div>
-        </div>
-      </div>
+    <div class="prog-item">
+      <div class="prog-header"><div class="prog-name">顶底分型</div><div class="prog-pct" id="p1-pct">下节</div></div>
+      <div class="prog-track"><div class="prog-fill" id="p1" style="width:0%"></div></div>
     </div>
-
-    <!-- Progress -->
-    <div class="scard">
-      <div class="scard-title"><div class="scard-title-dot"></div>七大零件进度</div>
-      <div class="prog-item">
-        <div class="prog-header">
-          <div class="prog-name">K线合并</div>
-          <div class="prog-pct">✓ 本节</div>
-        </div>
-        <div class="prog-track"><div class="prog-fill done" style="width:100%"></div></div>
-      </div>
-      <div class="prog-item">
-        <div class="prog-header">
-          <div class="prog-name">顶底分型</div>
-          <div class="prog-pct">下节</div>
-        </div>
-        <div class="prog-track"><div class="prog-fill" style="width:0%"></div></div>
-      </div>
-      <div class="prog-item">
-        <div class="prog-header">
-          <div class="prog-name">笔</div>
-          <div class="prog-pct">待学</div>
-        </div>
-        <div class="prog-track"><div class="prog-fill zero" style="width:0%"></div></div>
-      </div>
-      <div class="prog-item">
-        <div class="prog-header">
-          <div class="prog-name">线段</div>
-          <div class="prog-pct">待学</div>
-        </div>
-        <div class="prog-track"><div class="prog-fill zero" style="width:0%"></div></div>
-      </div>
-      <div class="prog-item">
-        <div class="prog-header">
-          <div class="prog-name">中枢</div>
-          <div class="prog-pct">待学</div>
-        </div>
-        <div class="prog-track"><div class="prog-fill zero" style="width:0%"></div></div>
-      </div>
-      <div class="prog-item">
-        <div class="prog-header">
-          <div class="prog-name">背驰</div>
-          <div class="prog-pct">待学</div>
-        </div>
-        <div class="prog-track"><div class="prog-fill zero" style="width:0%"></div></div>
-      </div>
-      <div class="prog-item">
-        <div class="prog-header">
-          <div class="prog-name">三类买卖点</div>
-          <div class="prog-pct">待学</div>
-        </div>
-        <div class="prog-track"><div class="prog-fill zero" style="width:0%"></div></div>
-      </div>
+    <div class="prog-item">
+      <div class="prog-header"><div class="prog-name">笔</div><div class="prog-pct">待学</div></div>
+      <div class="prog-track"><div class="prog-fill zero" style="width:0%"></div></div>
     </div>
-
-    <!-- Origins -->
-    <div class="scard">
-      <div class="scard-title"><div class="scard-title-dot"></div>缠论起源</div>
-      <div class="origin-item">
-        <div class="origin-year">2006</div>
-        <div class="origin-text">禅师以「爱数学的女孩」为ID开始在新浪博客发文，正式开创缠论体系</div>
-      </div>
-      <div class="origin-item">
-        <div class="origin-year">06–08</div>
-        <div class="origin-text">发布1134篇文章，涵盖诗词、音乐、时政、数学及「教你炒股票」108讲</div>
-      </div>
-      <div class="origin-item">
-        <div class="origin-year">特征</div>
-        <div class="origin-text">原文非结构化，随想随写；后经研究者整理为可学习的系统体系</div>
-      </div>
-      <div class="origin-item">
-        <div class="origin-year">身份</div>
-        <div class="origin-text">疑为李彪，中国大型基金/金融机构高层，三十余岁英年早逝</div>
-      </div>
-      <div class="origin-item">
-        <div class="origin-year">vs江恩</div>
-        <div class="origin-text">江恩侧重纯预测；缠论侧重市场分类体系，提供工具与准则</div>
-      </div>
+    <div class="prog-item">
+      <div class="prog-header"><div class="prog-name">线段</div><div class="prog-pct">待学</div></div>
+      <div class="prog-track"><div class="prog-fill zero" style="width:0%"></div></div>
     </div>
-
-    <!-- Next lesson tip -->
-    <div class="scard" style="background: var(--navy); border-color: var(--navy-light);">
-      <div class="scard-title" style="color: var(--gold-light);">
-        <div class="scard-title-dot"></div>下节预告
-      </div>
-      <div style="font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.75;">
-        <strong style="color: var(--gold-light); font-family: 'Noto Serif SC',serif;">顶底分型</strong><br>
-        K线合并完成后，如何从处理后的K线图中识别顶分型与底分型？这是判断「笔」的前提条件。
-      </div>
-      <div style="margin-top: 14px; font-family: 'IBM Plex Mono',monospace; font-size: 10px; color: rgba(255,255,255,0.25);">
-        上传下节课音频转录文件即可自动生成笔记 →
-      </div>
+    <div class="prog-item">
+      <div class="prog-header"><div class="prog-name">中枢</div><div class="prog-pct">待学</div></div>
+      <div class="prog-track"><div class="prog-fill zero" style="width:0%"></div></div>
     </div>
+    <div class="prog-item">
+      <div class="prog-header"><div class="prog-name">背驰</div><div class="prog-pct">待学</div></div>
+      <div class="prog-track"><div class="prog-fill zero" style="width:0%"></div></div>
+    </div>
+    <div class="prog-item">
+      <div class="prog-header"><div class="prog-name">三类买卖点</div><div class="prog-pct">待学</div></div>
+      <div class="prog-track"><div class="prog-fill zero" style="width:0%"></div></div>
+    </div>
+  </div>
 
-  </aside>
+  <div class="scard">
+    <div class="scard-title"><div class="scard-title-dot"></div>缠论起源</div>
+    <div class="origin-item"><div class="origin-year">2006</div><div class="origin-text">禅师以「爱数学的女孩」为ID开始在新浪博客发文，正式开创缠论体系</div></div>
+    <div class="origin-item"><div class="origin-year">06–08</div><div class="origin-text">发布1134篇文章，涵盖诗词、音乐、时政、数学及「教你炒股票」108讲</div></div>
+    <div class="origin-item"><div class="origin-year">特征</div><div class="origin-text">原文非结构化，随想随写；后经研究者整理为可学习的系统体系</div></div>
+    <div class="origin-item"><div class="origin-year">身份</div><div class="origin-text">疑为李彪，中国大型基金/金融机构高层，三十余岁英年早逝</div></div>
+    <div class="origin-item"><div class="origin-year">vs江恩</div><div class="origin-text">江恩侧重纯预测；缠论侧重市场分类体系，提供工具与准则</div></div>
+  </div>
+
+  <div class="scard" id="next-card" style="background:var(--navy);border-color:var(--navy-light);">
+    <div class="scard-title" style="color:var(--gold-light);"><div class="scard-title-dot"></div>下节预告</div>
+    <div id="next-content" style="font-size:13px;color:rgba(255,255,255,.55);line-height:1.75;">
+      <strong style="color:var(--gold-light);font-family:'Noto Serif SC',serif;">顶底分型</strong><br>
+      K线合并完成后，如何从处理后的K线图中识别顶分型与底分型？这是判断「笔」的前提条件。
+    </div>
+    <div style="margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:rgba(255,255,255,.25);">上传下节课音频转录文件即可自动生成笔记 →</div>
+  </div>
+</aside>
 </div>
 
 <script>
-  // Animate progress bars on load
-  window.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-      document.querySelectorAll('.prog-fill').forEach(el => {
-        const target = el.style.width;
-        el.style.width = '0%';
-        requestAnimationFrame(() => {
-          setTimeout(() => { el.style.width = target; }, 100);
-        });
-      });
-    }, 300);
-  });
+const lessons = [
+  {
+    badge: '第 1 课 / 共 8 节',
+    p0: { w: '100%', cls: 'done', pct: '✓ 本节' },
+    p1: { w: '0%',   cls: '',     pct: '下节' },
+    next: '<strong style="color:var(--gold-light);font-family:\'Noto Serif SC\',serif;">顶底分型</strong><br>K线合并完成后，如何识别顶分型与底分型？这是判断「笔」的前提条件。'
+  },
+  {
+    badge: '第 2 课 / 共 8 节',
+    p0: { w: '100%', cls: 'done', pct: '✓ 已完成' },
+    p1: { w: '100%', cls: '',     pct: '✓ 本节' },
+    next: '<strong style="color:var(--gold-light);font-family:\'Noto Serif SC\',serif;">笔（详解）</strong><br>顶底分型如何连接成「笔」？笔的规则、最少K线数量，以及如何在盘面上划分笔的起点与终点。'
+  }
+];
 
-  // Tab switching (visual only, no content switch yet)
-  document.querySelectorAll('.nav-tab').forEach(tab => {
-    tab.addEventListener('click', function() {
-      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-      this.classList.add('active');
-    });
+const tabs = document.querySelectorAll('.nav-tab[data-lesson]');
+
+function switchLesson(idx) {
+  if (idx < 0) return;
+  const cfg = lessons[idx];
+
+  // tabs
+  tabs.forEach(t => t.classList.remove('active'));
+  tabs[idx].classList.add('active');
+
+  // lesson panels
+  document.querySelectorAll('.lesson-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('lesson-' + idx).classList.add('active');
+
+  // badge
+  document.getElementById('nav-badge').textContent = cfg.badge;
+
+  // progress
+  const p0el = document.getElementById('p0');
+  const p1el = document.getElementById('p1');
+  p0el.style.width = '0%'; p1el.style.width = '0%';
+  p0el.className = 'prog-fill ' + cfg.p0.cls;
+  p1el.className = 'prog-fill ' + cfg.p1.cls;
+  document.getElementById('p0-pct').textContent = cfg.p0.pct;
+  document.getElementById('p1-pct').textContent = cfg.p1.pct;
+  requestAnimationFrame(() => setTimeout(() => {
+    p0el.style.width = cfg.p0.w;
+    p1el.style.width = cfg.p1.w;
+  }, 80));
+
+  // next card
+  document.getElementById('next-content').innerHTML = cfg.next;
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+tabs.forEach(tab => {
+  tab.addEventListener('click', function() {
+    const idx = parseInt(this.dataset.lesson);
+    switchLesson(idx);
   });
+});
+
+// init progress animation on load
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    document.getElementById('p0').style.width = '100%';
+  }, 400);
+});
 </script>
 </body>
 </html>
